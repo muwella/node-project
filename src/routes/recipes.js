@@ -1,67 +1,71 @@
-const express = require('express')
+import express from 'express'
+import RecipesService from './../services/recipes.service.js'
 
 const router = express.Router()
-
-const recipe = {
-  id: 54827,
-  name: 'pizza',
-  ingredients: [
-    {
-      name: 'ingredient1'
-    },
-    {
-      name: 'ingredient2'
-    },
-    {
-      name: 'ingredient3'
-    }
-  ],
-  creation_date: 'creation date',
-  update_date: 'update date',
-  category: [
-    'dulce',
-    'salado',
-    'fiestas'
-  ]
-}
+const service = new RecipesService()
 
 // endpoints
 
-// EXAMPLE query
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  // textMatch: string contained in recipe's name
   const { category, textMatch } = req.query
   
-  // search on DB with category and textMatch filters
-  // e.g. textMatch = 'oli' gets 'alioli sauce' and 'ravioli'
-  // as long as those two also match with the category
-  res.json([
+  const recipes = await service.get_recipes()
+
+  res.status(200).json({
     category,
-    textMatch
-  ])
+    textMatch,
+    recipes
+  })
 })
 
 
-// EXAMPLE parameter
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res, next) => {
+  const { id } = req.params
+  
+  try {
+    const recipe = await service.get_recipe_by_id(id)
+    res.status(200).json(recipe)
+  } catch (err) {
+    console.log('enter catch')
+    next(err)
+  }
+})
+
+
+router.post('/new', async (req, res) => {
+  const body = req.body
+
+  res.status(201).json({
+    message: 'recipe info received',
+    data: body
+  })
+})
+
+
+router.put('/update/:id', async (req, res) => {
+})
+
+
+router.patch('/partialUpdate/:id', async (req, res) => {
+  const { id } = req.params
+  const body = req.body
+
+  res.json({
+    message: 'partial update',
+    id,
+    data: body
+  })
+})
+
+
+router.delete('/delete/:id', async (req, res) => {
   const { id } = req.params
 
-  // search in DB for recipe with id
   res.json({
-    id,
-    recipe
+    message: 'deleted',
+    id
   })
 })
 
-
-// EXAMPLE to get 2 parameters on the same endpoint
-router.get('/:categoryID/recipe/:recipeID', (req, res) => {
-  const { categoryID, recipeID } = req.params
-
-  res.json({
-    categoryID,
-    recipeID
-  })
-})
-
-
-module.exports = router
+export default router

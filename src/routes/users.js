@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 
 const router = express.Router()
 
@@ -7,8 +7,8 @@ router.get('/:id', (req, res) => {
   
     // search in DB for user with id
     res.json({
-      id
+      id, 'papas': 'ranch'
     })
   })
 
-module.exports = router
+export default router

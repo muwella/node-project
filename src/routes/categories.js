@@ -1,31 +1,31 @@
 import express from 'express'
-import IngredientsService from './../services/ingredients.service.js'
+import CategoriesService from './../services/categories.service.js'
 import empty from 'is-empty'
 
 const router = express.Router()
-const service = new IngredientsService()
+const service = new CategoriesService()
 
 
 // endpoints
 
 router.get('/', async (req, res) => {
-  const ingredients = await service.get_ingredients()
+  const categories = await service.get_categories()
 
-  res.status(200).json({ingredients})
+  res.status(200).json({categories})
 })
 
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params
   
-  const ingredient = await service.get_ingredient_by_id(id)
+  const category = await service.get_category_by_id(id)
 
-  if (empty(ingredient)) {
+  if (empty(category)) {
     res.status(404).json({
-      message: "ingredient not found"
+      message: "category not found"
     })
   } else {
-    res.status(200).json(ingredient)
+    res.status(200).json(category)
   }
 })
 
@@ -34,7 +34,7 @@ router.post('/new', async (req, res) => {
   const body = req.body
 
   res.status(201).json({
-    message: 'ingredient info received',
+    message: 'category info received',
     data: body
   })
 })
