@@ -44,6 +44,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 
+// WIP schema validate
 router.post('/new', async (req, res) => {
   const body = req.body
 
