@@ -31,6 +31,9 @@ class RecipesService {
   }
 
   async create(recipe) {
+    // validate schema
+
+    // try to save on DB
     try {
       new models.RecipeModel({recipe}).save()
     } catch(err) {
@@ -39,6 +42,7 @@ class RecipesService {
   }
 
   async get_recipes(filter_input) {
+    // create filter
     const filter = {
       name: { $regex: filter_input.search_text, $options: 'i' }
     }
@@ -47,9 +51,7 @@ class RecipesService {
       filter.category = filter_input.category
     }
 
-    const recipes = await models.RecipeModel.find(filter)
-
-    return recipes
+    return await models.RecipeModel.find(filter)
   }
 
   async get_recipe_by_id(id) {
