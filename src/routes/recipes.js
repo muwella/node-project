@@ -4,19 +4,31 @@ import RecipesService from './../services/recipes.service.js'
 const router = express.Router()
 const service = new RecipesService()
 
+
 // endpoints
 
+// WIP get recipes by user
 router.get('/', async (req, res) => {
-  // textMatch: string contained in recipe's name
-  const { category, textMatch } = req.query
-  
-  const recipes = await service.get_recipes()
+  const { category, search_text } = req.query
 
-  res.status(200).json({
-    category,
-    textMatch,
-    recipes
-  })
+  const filter = {}
+
+  if (category){
+    filter.category = category
+  }
+  
+  if (search_text){
+    filter.search_text = search_text
+  } else {
+    filter.search_text = ''
+  }
+
+  try {
+    const recipes = await service.get_recipes(filter)
+    res.status(200).json(recipes)
+  } catch(err) {
+    console.error(err)
+  }
 })
 
 
@@ -27,14 +39,15 @@ router.get('/:id', async (req, res, next) => {
     const recipe = await service.get_recipe_by_id(id)
     res.status(200).json(recipe)
   } catch (err) {
-    console.log('enter catch')
-    next(err)
+    console.error(err)
   }
 })
 
 
 router.post('/new', async (req, res) => {
   const body = req.body
+
+  await service.create(body)
 
   res.status(201).json({
     message: 'recipe info received',

@@ -1,0 +1,42 @@
+# HTTP get users
+GET http://localhost:3001/api/v1/users/
+content-type: application/json
+
+### 
+
+# HTTP get user by id
+GET http://localhost:3001/api/v1/users/637000b64de659e21c5ef978
+content-type: application/json
+
+###
+
+# HTTP create user
+POST http://localhost:3001/api/v1/users/new
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP update user
+PUT http://localhost:3001/api/v1/users/update/637000b64de659e21c5ef978
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP partial update users
+PATCH http://localhost:3001/api/v1/users/partialUpdate/637000b64de659e21c5ef978
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP delete user
+DELETE http://localhost:3001/api/v1/users/delete/637000b64de659e21c5ef978
+content-type: application/json

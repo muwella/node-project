@@ -1,0 +1,42 @@
+# HTTP get recipes
+GET http://localhost:3001/api/v1/recipes/
+content-type: application/json
+
+###
+
+# HTTP get recipe by id
+GET http://localhost:3001/api/v1/recipes/63741794a73179ebbe10da9b
+content-type: application/json
+
+###
+
+# HTTP create recipe
+POST http://localhost:3001/api/v1/recipes/new
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP update recipe
+PUT http://localhost:3001/api/v1/recipes/update/63741794a73179ebbe10da9b
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP partial update recipe
+PATCH http://localhost:3001/api/v1/recipes/partialUpdate/63741794a73179ebbe10da9b
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP delete recipe
+DELETE http://localhost:3001/api/v1/recipes/63741794a73179ebbe10da9b
+content-type: application/json

@@ -1,0 +1,42 @@
+# HTTP get categories
+GET http://localhost:3001/api/v1/categories/
+content-type: application/json
+
+### 
+
+# HTTP get category by id
+GET http://localhost:3001/api/v1/categories/636e98a4847f5d6c2d6aaae5
+content-type: application/json
+
+###
+
+# HTTP create category
+POST http://localhost:3001/api/v1/categories/new
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP update category
+PUT http://localhost:3001/api/v1/categories/update/636e98a4847f5d6c2d6aaae5
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP partial update category
+PATCH http://localhost:3001/api/v1/categories/partialUpdate/636e98a4847f5d6c2d6aaae5
+content-type: application/json
+
+{
+}
+
+###
+
+# HTTP delete category
+DELETE http://localhost:3001/api/v1/categories/delete/636e98a4847f5d6c2d6aaae5
+content-type: application/json
