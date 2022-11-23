@@ -30,15 +30,13 @@ class RecipesService {
     }
   }
 
-  async create(recipe) {
-    // validate schema
-
-    // try to save on DB
-    try {
-      new models.RecipeModel({recipe}).save()
-    } catch(err) {
-      console.error(err)
+  async create(body) {
+    const recipe = {
+      ...body,
+      creatorID: '637bfe9621ee9e07bc6534d8'
     }
+    const recipeInDB = await new models.RecipeModel(recipe).save()
+    return recipeInDB
   }
 
   async get_recipes(filter_input) {
@@ -56,7 +54,7 @@ class RecipesService {
 
   async get_recipe_by_id(id) {
     const recipe = await models.RecipeModel.findById(id)
-    
+
     if ( empty(recipe) ) {
       throw new Error('Recipe not found')
     } else {
@@ -64,16 +62,17 @@ class RecipesService {
     }
   }
 
-  async update() {
-
+  async update(id) {
+    const recipe = await models.RecipeModel.findByIdAndUpdate(id)
+    return recipe
   }
 
   async partial_update() {
 
   }
 
-  async delete() {
-
+  async delete(id) {
+    await models.RecipeModel.findByIdAndDelete(id)
   }
 }
 

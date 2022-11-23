@@ -13,7 +13,10 @@ export default {
     type: String,
     required: [true, 'Password required']
   },
-	// name: String,
+	name: {
+    type: String,
+    default: ''
+  },
 	creation_date: {
     type: Date,
     default: Date.now

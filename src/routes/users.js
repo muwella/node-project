@@ -1,15 +1,32 @@
 import express from 'express'
+import { log_error, error_handler } from '../middlewares/error.handler.js'
 import UsersService from '../services/users.service.js'
 
 const router = express.Router()
 const service = new UsersService()
 
 
-// endpoints
+// WIP HOME
+  // name (if !undefined name, else username)
+  // suggestions (array of 0,1,2,3 recipes random)
+  // last_added (array of 0,1,2,3 recipes)
+  // planning (array of 0,1,2,3 recipes planning)
+// WIP PLANNING
+  // calcular la semana actual (dia inicial, dia actual, dia final)
+  // recetas con esas fechas en PlanningModel
 
+
+// endpoints
+// WIP ALL get/post/patch/delete if logged
+
+
+// WIP get all only for development
+  // LATER a user can search users to follow
+  // LATER a user can have recipes from others on their planning
 router.get('/', async (req, res) => {
   try {
     const users = await service.get_users()
+
     res.status(200).json(users)
   } catch(err) {
     console.error(err)
@@ -17,13 +34,71 @@ router.get('/', async (req, res) => {
 })
 
 
-router.get('/:id', (req, res) => {
-    const { id } = req.params
-  
-    // search in DB for user with id
-    res.json({
-      id, 'papas': 'ranch'
+// WIP get if user info and TOKEN coincide
+router.get('/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const user = await service.get_user_by_id(id)
+    res.status(200).json(user)
+  } catch (err) {
+    log_error(err, req, res)
+    error_handler(err, 404, req, res)  }
+})
+
+
+router.post('/new', async (req, res) => {
+  try {
+    const user = await service.create(req.body)
+
+    res.status(201).json({
+      message: "User created",
+      data: user
     })
-  })
+  } catch(err) {
+    log_error(err, req, res)
+    error_handler(err, 400, req, res)
+  }
+})
+
+
+// WIP update only for developtment (update all)
+router.put('/updateAll', async (req, res) => {
+  try {
+    const users = await service.update_all(req.body)
+    res.status(200).json(users)
+  } catch(err) {
+    log_error(err, req, res)
+    error_handler(err, 400, req, res)
+  }
+})
+
+
+// WIP patch if user info and TOKEN coincide
+router.patch('/update/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const user = await service.update(id, req.body)
+    res.status(200).json(user)
+  } catch(err) {
+    log_error(err, req, res)
+    error_handler(err, 400, req, res)
+  }
+})
+
+
+// WIP delete if user info and TOKEN coincide
+router.delete('/delete/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    await service.delete(id)
+    res.status(200).json({ 'message': `User ${id} deleted` })
+  } catch(err) {
+    log_error(err, req, res)
+    error_handler(err, 400, req, res)
+  }
+})
 
 export default router

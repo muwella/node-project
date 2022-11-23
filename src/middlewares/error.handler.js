@@ -1,12 +1,12 @@
-const log_error = (err, req, res, next) => {
-	console.error(err)
-	next(err)
+import colors from 'colors'
+
+const log_error = (err, req, res) => {
+	console.error(err.message.red)
 }
 
-const error_handler = (err, req, res, next) => {
-	res.status(500).json({
-		message: err.message,
-		stack: err.stack
+const error_handler = (err, status, req, res) => {
+	res.status(status).json({
+		message: err.message
 	})
 }
 

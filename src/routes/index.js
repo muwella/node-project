@@ -11,6 +11,7 @@ const router = express.Router()
 // there can be several versions with different endpoints
 app.use('/api/v1', router)
 
+// WIP use planning
 router.use('/test', testRouter)
 router.use('/users', usersRouter)
 router.use('/recipes', recipesRouter)

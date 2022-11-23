@@ -16,7 +16,7 @@ dbConnection()
 
 // start server
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`.cyan.bold)
+  console.log(`Server listening on port ${port}`.brightCyan)
 })
 
 // LOOKUP joi for schemas

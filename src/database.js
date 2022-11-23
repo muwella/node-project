@@ -8,7 +8,7 @@ const dbConnection = async () => {
       useUnifiedTopology: true
 		})
 		// use `await mongoose.connect('mongodb://user:password@localhost:27017/kittchen');` if your database has auth enabled
-		console.log('Succesful connection to DB'.green)
+		console.log('Succesful connection to DB'.cyan)
 	}
 	catch(err) {
 		console.log('Error connecting to DB'.red)

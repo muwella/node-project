@@ -1,4 +1,5 @@
 import express from 'express'
+import { log_error, error_handler } from '../middlewares/error.handler.js'
 import RecipesService from './../services/recipes.service.js'
 
 const router = express.Router()
@@ -6,8 +7,9 @@ const service = new RecipesService()
 
 
 // endpoints
+// WIP ALL get/post/patch/delete if logged
 
-// WIP get recipes by user
+// WIP get by user with TOKEN received
 router.get('/', async (req, res) => {
   const { category, search_text } = req.query
 
@@ -32,54 +34,79 @@ router.get('/', async (req, res) => {
 })
 
 
-router.get('/:id', async (req, res, next) => {
+// WIP get if creatorID and TOKEN coincide
+router.get('/:id', error_handler, async (req, res) => {
   const { id } = req.params
   
   try {
     const recipe = await service.get_recipe_by_id(id)
     res.status(200).json(recipe)
   } catch (err) {
-    console.error(err)
+    log_error(err, req, res)
+    error_handler(err, 404, req, res)
   }
 })
 
 
-// WIP schema validate
+// WIP post with creatorID from TOKEN
 router.post('/new', async (req, res) => {
-  const body = req.body
+  try {
+    const recipe = await service.create(req.body, '637bfe9621ee9e07bc6534d8')
 
-  await service.create(body)
-
-  res.status(201).json({
-    message: 'recipe info received',
-    data: body
-  })
+    res.status(201).json({
+      message: 'Recipe created',
+      data: recipe
+    })
+  } catch(err) {
+    res.status(400).json(err)
+  }
 })
 
 
+// WIP update only for developtment (update all)
 router.put('/update/:id', async (req, res) => {
+  try {
+    const recipe = await service.update(req.body)
+
+    res.status(201).json({
+      message: 'Recipe updated',
+      data: recipe
+    })
+  } catch(err) {
+    console.error(err)
+    res.status(400).json({err})
+  }
 })
 
 
+// WIP patch if creatorID and TOKEN coincide
 router.patch('/partialUpdate/:id', async (req, res) => {
   const { id } = req.params
   const body = req.body
 
   res.json({
-    message: 'partial update',
+    message: 'partial update TEST',
     id,
     data: body
   })
 })
 
 
+// WIP delete if creatorID and TOKEN coincide
 router.delete('/delete/:id', async (req, res) => {
   const { id } = req.params
 
-  res.json({
-    message: 'deleted',
-    id
-  })
+  try {
+    await service.delete(id)
+    res.status(200).json({
+      message: 'Recipe deleted',
+      recipe_id: id
+    })
+
+  } catch(err) {
+    log_error(err, req, res)
+    error_handler(err, 404, req, res)
+  }
 })
 
 export default router

@@ -11,10 +11,7 @@ export default {
 		type: mongoose.Types.ObjectId,
 		required: [true, 'Creator ID required']
 	},
-	category: {
-		type: mongoose.Types.ObjectId,
-		default: '' // Uncategorized category, created by Manager user
-	},
+	category: [mongoose.Types.ObjectId],
 	creation_date: {
 		type: Date,
 		default: Date.now

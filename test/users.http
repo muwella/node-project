@@ -5,7 +5,7 @@ content-type: application/json
 ### 
 
 # HTTP get user by id
-GET http://localhost:3001/api/v1/users/637000b64de659e21c5ef978
+GET http://localhost:3001/api/v1/users/637c32a01bb1e745c5fac1df
 content-type: application/json
 
 ###
@@ -15,28 +15,37 @@ POST http://localhost:3001/api/v1/users/new
 content-type: application/json
 
 {
+	"username": "peppa pig",
+	"email": "perfect",
+	"password": "anotherSuperPassword"
+}
+
+###
+
+# HTTP update all (development)
+# fields are added or removed on all documents
+PUT http://localhost:3001/api/v1/users/updateAll
+content-type: application/json
+
+{
+	"new_field": {
+		"type": "unset",
+	}
 }
 
 ###
 
 # HTTP update user
-PUT http://localhost:3001/api/v1/users/update/637000b64de659e21c5ef978
+PATCH http://localhost:3001/api/v1/users/update/637c35cfbad54ffd19285730
 content-type: application/json
 
 {
+	"name": "Peppa oink"
 }
 
 ###
 
-# HTTP partial update users
-PATCH http://localhost:3001/api/v1/users/partialUpdate/637000b64de659e21c5ef978
-content-type: application/json
-
-{
-}
-
-###
-
+// PICK UP HERE
 # HTTP delete user
-DELETE http://localhost:3001/api/v1/users/delete/637000b64de659e21c5ef978
+DELETE http://localhost:3001/api/v1/users/delete/637c35cfbad54ffd19285730
 content-type: application/json
