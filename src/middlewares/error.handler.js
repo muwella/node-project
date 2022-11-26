@@ -1,10 +1,10 @@
-import colors from 'colors'
+import 'colors'
 
-const log_error = (err, req, res) => {
-	console.error(err.message.red)
+const log_error = (err, req, res, next) => {
+	console.error(err.stack.red)
 }
 
-const error_handler = (err, status, req, res) => {
+const error_handler = (err, status, req, res, next) => {
 	res.status(status).json({
 		message: err.message
 	})

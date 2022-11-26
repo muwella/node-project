@@ -7,6 +7,8 @@ content-type: application/json
 # HTTP get user by id
 GET http://localhost:3001/api/v1/users/637c32a01bb1e745c5fac1df
 content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM3YmZlOTYyMWVlOWUwN2JjNjUzNGQ4IiwiaWF0IjoxNjY5NDE0OTk2LCJleHAiOjE2Njk1MDEzOTZ9.qwsywYZxp1-BXRJgedbMtZQ3eFdiobQ2FZZQZYxZ5ME
+
 
 ###
 
@@ -15,9 +17,9 @@ POST http://localhost:3001/api/v1/users/new
 content-type: application/json
 
 {
-	"username": "peppa pig",
-	"email": "perfect",
-	"password": "anotherSuperPassword"
+	"username": "ahorasisisi",
+	"email": "aberrr",
+	"password": "i3U8WVZPmy%SzY5j"
 }
 
 ###
@@ -45,7 +47,6 @@ content-type: application/json
 
 ###
 
-// PICK UP HERE
 # HTTP delete user
 DELETE http://localhost:3001/api/v1/users/delete/637c35cfbad54ffd19285730
 content-type: application/json

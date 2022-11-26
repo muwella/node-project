@@ -1,16 +1,18 @@
-import colors from 'colors'
+import 'colors'
+import * as dotenv from 'dotenv'
 import express from 'express'
+import verify_token from './middlewares/token.js'
 import routes from './routes/index.js'
-import { log_error, error_handler } from './middlewares/error.handler.js'
 import dbConnection from './database.js'
 
+
+dotenv.config()
 const app = express()
 const port = 3001
 
 app.use(express.json())
+app.use(verify_token)
 app.use('/', routes)
-app.use(log_error)
-app.use(error_handler)
 
 dbConnection()
 

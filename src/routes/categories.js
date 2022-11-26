@@ -1,4 +1,5 @@
 import express from 'express'
+import { log_error, error_handler } from '../middlewares/error.handler.js'
 import CategoriesService from './../services/categories.service.js'
 import empty from 'is-empty'
 

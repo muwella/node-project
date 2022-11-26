@@ -1,0 +1,63 @@
+# HTTP Login | Username OK | Password OK
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"username": "alaan96",
+	"password": "change again"
+}
+
+###
+
+# HTTP Login | Email OK | Password OK
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"email": "alaanjimenez03@gmail.com",
+	"password": "change again"
+}
+
+###
+
+# HTTP Login | Username OK | Wrong Password
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"username": "alaan96",
+	"password": "wrong password"
+}
+
+###
+
+# HTTP Login | Email OK | Wrong Password
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"email": "alaanjimenez03@gmail.com",
+	"password": "wrong password"
+}
+
+###
+
+# HTTP Login | Wrong Username
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"username": "wrong username",
+	"password": "it doesnt matter"
+}
+
+###
+
+# HTTP Login | Wrong Email
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"email": "wrong email",
+	"password": "it doesnt matter"
+}

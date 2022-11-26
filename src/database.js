@@ -1,5 +1,5 @@
+import 'colors'
 import mongoose from 'mongoose'
-import colors from 'colors'
 
 const dbConnection = async () => {
 	try {
