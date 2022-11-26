@@ -67,7 +67,6 @@ class UsersService {
   }
 
   async login(user_login) {
-    console.log(user_login.password)
     // check if user exists
     const user_exists = await this.check_user_exists(user_login)
 
@@ -75,7 +74,6 @@ class UsersService {
       // check if passwords match
       const hashPassword = await this.get_hash_password(user_login)
       const passwords_match = await this.compare_password(user_login.password, hashPassword)
-      console.log(passwords_match)
 
       if (passwords_match) {
         const userDB = await this.get_user_for_token(user_login)
@@ -94,7 +92,6 @@ class UsersService {
     return await bcrypt.hash(password, saltRounds)
   }
 
-  // FIXME cree un usuario y devolvio Wrong password
   async create(user) {
     // check if any required fields already exist
     if (await this.username_taken(user.username)) {
@@ -109,14 +106,11 @@ class UsersService {
       'password': user.password
     }
     
-    console.log(user.password)
     // hash password
     user.password = await this.hash_password(user.password)
 
-    console.log(user.password)
     // save on DB
     await new models.UserModel(user).save()
-    console.log(user.password)
 
     // login user
     return await this.login(user_login)
