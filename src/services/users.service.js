@@ -66,20 +66,22 @@ class UsersService {
     }
   }
 
+  // LATER have tokens expire and refresh them
+  issue_JWT(id) {
+    return jwt.sign({ "user_id": id }, process.env.PRIVATE_KEY)
+  }
+
   async login(user_login) {
-    // check if user exists
     const user_exists = await this.check_user_exists(user_login)
 
     if (user_exists) {
-      // check if passwords match
       const hashPassword = await this.get_hash_password(user_login)
       const passwords_match = await this.compare_password(user_login.password, hashPassword)
 
       if (passwords_match) {
         const userDB = await this.get_user_for_token(user_login)
 
-        // issue a JWT
-        return jwt.sign({ "user_id": userDB._id }, process.env.PRIVATE_KEY, { expiresIn: '7d' })
+        return this.issue_JWT(userDB._id)
       } else {
         return 'Wrong password'
       }
@@ -120,15 +122,13 @@ class UsersService {
     return await models.UserModel.find()
   }
 
+  async get_user_me(token) {
+    const decoded = jwt.decode(token)
+    return await models.UserModel.findOne({_id: decoded.user_id}, {password:0})
+  }
+
   async get_user_by_id(id) {
     return await models.UserModel.findOne({_id: id}, {password:0})
-
-    // should not check this on here
-    if ( empty(user) ) {
-      throw new Error('User not found')
-    } else {
-      return user
-    }
   }
   
   async get_user_by_username(username) {
@@ -173,7 +173,7 @@ class UsersService {
     }
     return await models.UserModel.find()
   }
-
+  
   async update(id, change) {
     await models.UserModel.findByIdAndUpdate(id, change)
     return await this.get_user_by_id(id)

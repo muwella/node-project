@@ -3,8 +3,8 @@ POST http://localhost:3001/api/v1/login
 content-type: application/json
 
 {
-	"username": "alaan96",
-	"password": "change again"
+	"username": "testUsername",
+	"password": "testPassword"
 }
 
 ###
@@ -14,8 +14,8 @@ POST http://localhost:3001/api/v1/login
 content-type: application/json
 
 {
-	"email": "alaanjimenez03@gmail.com",
-	"password": "change again"
+	"email": "test@mail.com",
+	"password": "testPassword"
 }
 
 ###
@@ -25,8 +25,8 @@ POST http://localhost:3001/api/v1/login
 content-type: application/json
 
 {
-	"username": "alaan96",
-	"password": "wrong password"
+	"username": "testUsername",
+	"password": "wrongPassword"
 }
 
 ###
@@ -36,8 +36,8 @@ POST http://localhost:3001/api/v1/login
 content-type: application/json
 
 {
-	"email": "alaanjimenez03@gmail.com",
-	"password": "wrong password"
+	"email": "test@mail.com",
+	"password": "wrongPassword"
 }
 
 ###
@@ -47,8 +47,8 @@ POST http://localhost:3001/api/v1/login
 content-type: application/json
 
 {
-	"username": "wrong username",
-	"password": "it doesnt matter"
+	"username": "wrongUsername",
+	"password": "testPassword"
 }
 
 ###
@@ -58,6 +58,6 @@ POST http://localhost:3001/api/v1/login
 content-type: application/json
 
 {
-	"email": "wrong email",
-	"password": "it doesnt matter"
+	"email": "wrong@email.com",
+	"password": "testPassword"
 }

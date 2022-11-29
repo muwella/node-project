@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken'
 
 const verify_token = (req, res, next) => {
-	if(req.url != '/api/v1/users/new' || req.method != 'POST') {
+	if(req.url != '/api/v1/users/new' && req.url != '/api/v1/login') {
 		try {
-			const encoded = jwt.verify(req.headers.authorization, process.env.PRIVATE_KEY);
+			const token = req.headers.authorization
+			jwt.verify(token, process.env.PRIVATE_KEY);
 		} catch(err) {
-			res.status(400).json({'todo': 'mal'})
-			console.error(err)
+			console.log(err)
+			res.json(err)
 		}
 	}
 	next()

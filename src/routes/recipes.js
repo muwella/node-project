@@ -1,57 +1,20 @@
 import express from 'express'
 import { log_error, error_handler } from '../middlewares/error.handler.js'
 import RecipesService from './../services/recipes.service.js'
+import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 const service = new RecipesService()
 
 
 // endpoints
-// WIP ALL get/post/patch/delete if logged
 
-// WIP get by user with TOKEN received
-router.get('/', async (req, res) => {
-  const { category, search_text } = req.query
+// PRODUCTION
 
-  const filter = {}
-
-  if (category){
-    filter.category = category
-  }
-  
-  if (search_text){
-    filter.search_text = search_text
-  } else {
-    filter.search_text = ''
-  }
-
-  try {
-    const recipes = await service.get_recipes(filter)
-    res.status(200).json(recipes)
-  } catch(err) {
-    console.error(err)
-  }
-})
-
-
-// WIP get if creatorID and TOKEN coincide
-router.get('/:id', error_handler, async (req, res) => {
-  const { id } = req.params
-  
-  try {
-    const recipe = await service.get_recipe_by_id(id)
-    res.status(200).json(recipe)
-  } catch (err) {
-    log_error(err, req, res)
-    error_handler(err, 404, req, res)
-  }
-})
-
-
-// WIP post with creatorID from TOKEN
 router.post('/new', async (req, res) => {
   try {
-    const recipe = await service.create(req.body, '637bfe9621ee9e07bc6534d8')
+    const decoded = jwt.decode(req.headers.authorization)
+    const recipe = await service.create(req.body, decoded.user_id)
 
     res.status(201).json({
       message: 'Recipe created',
@@ -63,46 +26,138 @@ router.post('/new', async (req, res) => {
 })
 
 
-// WIP update only for developtment (update all)
-router.put('/update/:id', async (req, res) => {
-  try {
-    const recipe = await service.update(req.body)
+router.get('/', async (req, res) => {
+  const { category, search_text } = req.query
+  const token = jwt.decode(req.headers.authorization)
+  
+  const filter_input = {
+    'id': token.user_id
+  }
+  
+  if (category){
+    filter.category = category
+  }
+  
+  if (search_text){
+    filter_input.search_text = search_text
+  } else { 
+    filter_input.search_text = ''
+  }
 
-    res.status(201).json({
-      message: 'Recipe updated',
-      data: recipe
-    })
+  const filter = await service.create_filter(filter_input)
+
+  try {
+    const recipes = await service.get_recipes(filter, token.user_id)
+    res.status(200).json(recipes)
   } catch(err) {
-    console.error(err)
-    res.status(400).json({err})
+    log_error(err, req, res)
+    error_handler(err, 400, req, res)
   }
 })
 
 
-// WIP patch if creatorID and TOKEN coincide
-router.patch('/partialUpdate/:id', async (req, res) => {
-  const { id } = req.params
-  const body = req.body
-
-  res.json({
-    message: 'partial update TEST',
-    id,
-    data: body
-  })
+router.get('/suggestions', async (req, res) => {
+  const token = jwt.decode(req.headers.authorization)
+  
+  try {
+    const suggestions = await service.get_suggestions(token.user_id)
+    res.status(200).json(suggestions)
+  } catch (err) {
+    log_error(err, req, res)
+    error_handler(err, 404, req, res)
+  }
 })
 
 
-// WIP delete if creatorID and TOKEN coincide
+router.get('/lastAdded', async (req, res) => {
+  const token = jwt.decode(req.headers.authorization)
+  
+  try {
+    const suggestions = await service.get_last_added(token.user_id)
+    res.status(200).json(suggestions)
+  } catch (err) {
+    log_error(err, req, res)
+    error_handler(err, 404, req, res)
+  }
+})
+
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params
+  const token = jwt.decode(req.headers.authorization)
+
+  if ( await service.isCreator(id, token.user_id) ) {
+    try {
+      const recipe = await service.get_recipe_by_id(id)
+      res.status(200).json(recipe)
+    } catch (err) {
+      log_error(err, req, res)
+      error_handler(err, 404, req, res)
+    }
+  } else {
+    res.status(401)
+  }
+})
+
+
+router.patch('/update/:id', async (req, res) => {
+  const { id } = req.params
+  const token = jwt.decode(req.headers.authorization)
+  
+  // update if the requester is the creator, otherwise 401 (Unauthorized)
+  if ( await service.isCreator(id, token.user_id) ) {
+    try {
+      const recipe = await service.update(id, req.body)
+      res.status(200).json(recipe)
+    } catch(err) {
+      log_error(err, req, res)
+      error_handler(err, 404, req, res)
+    }
+  } else {
+    res.status(401)
+  }
+})
+
+
 router.delete('/delete/:id', async (req, res) => {
   const { id } = req.params
+  const token = jwt.decode(req.headers.authorization)
 
+  // delete if the requester is the creator, otherwise 401 (Unauthorized)
+  if ( await service.isCreator(id, token.user_id) ) {
+    try {
+      await service.delete(id)
+      res.status(200).json({
+        message: 'Recipe deleted',
+        recipe_id: id
+      })
+    } catch(err) {
+      log_error(err, req, res)
+      error_handler(err, 404, req, res)
+    }
+  } else {
+    res.status(401)
+  }
+})
+
+
+// DEVELOPMENT
+
+router.put('/updateAll', async (req, res) => {
   try {
-    await service.delete(id)
-    res.status(200).json({
-      message: 'Recipe deleted',
-      recipe_id: id
-    })
+    const recipes = await service.update_all(req.body)
+    res.status(201).json(recipes)
+  } catch(err) {
+    log_error(err, req, res)
+    error_handler(err, 404, req, res)
+  }
+})
 
+
+router.delete('/deleteAll', async (req, res) => {
+  try {
+    const recipes = await service.delete_all(req.body)
+    res.status(201).json(recipes)
   } catch(err) {
     log_error(err, req, res)
     error_handler(err, 404, req, res)
