@@ -93,9 +93,7 @@ class RecipesService {
   }
 
   async get_last_added(id) {
-    const recipes = await this.get_recipes({'creator': id})
-
-    
+    return models.RecipeModel.find({creator: id}).sort({'creation_date': -1}).limit(3)
   }
 
   async update(id, change) {

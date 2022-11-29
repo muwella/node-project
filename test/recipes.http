@@ -6,7 +6,7 @@ content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
 
 {
-	"name": "Another recipe 3"
+	"name": "Another recipe 8"
 }
 
 ###
@@ -52,7 +52,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2
 ###
 
 # HTTP DELETE RECIPE
-DELETE http://localhost:3001/api/v1/recipes/delete/6384260b551c0a6b4b6b0cc1
+DELETE http://localhost:3001/api/v1/recipes/delete/63857a92601c57180e65563d
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
 

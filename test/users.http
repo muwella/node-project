@@ -30,6 +30,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2
 
 ###
 
+// WIP what happens with recipes when you delete a user
 // HTTP DELETE USER
 DELETE http://localhost:3001/api/v1/users/me/delete
 content-type: application/json

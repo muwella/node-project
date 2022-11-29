@@ -123,13 +123,16 @@ router.delete('/delete/:id', async (req, res) => {
   const { id } = req.params
   const token = jwt.decode(req.headers.authorization)
 
+  console.log(id)
+  console.log(token)
+
   // delete if the requester is the creator, otherwise 401 (Unauthorized)
   if ( await service.isCreator(id, token.user_id) ) {
     try {
       await service.delete(id)
       res.status(200).json({
-        message: 'Recipe deleted',
-        recipe_id: id
+        'message': 'Recipe deleted',
+        'recipe_id': id
       })
     } catch(err) {
       log_error(err, req, res)
