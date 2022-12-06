@@ -1,0 +1,101 @@
+// LOOKUP nodemailer
+
+// ACCOUNT MANAGEMENT
+
+// HTTP CREATE ACCOUNT
+// LATER after creation user gets a confirmation mail
+POST http://localhost:3001/api/v1/account/new
+content-type: application/json
+
+{
+	"username": "asdasdad",
+	"email": "ascfdasfafcav@mail.com",
+	"password": "testPassword"
+}
+
+###
+
+# HTTP CONFIRM ACCOUNT
+// LATER user cannot create recipes until account is confirmed
+PATCH http://localhost:3001/api/v1/account/confirmation/638e699e2aa64ddfcff47e53
+
+###
+
+// HTTP DEACTIVATE ACCOUNT
+// LATER after deactivation user gets an email with recover account link
+PATCH http://localhost:3001/api/v1/account/deactivate
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
+
+###
+
+// HTTP RECOVER ACCOUNT (ACTIVATE)
+// LATER user should get this link on mail
+PATCH http://localhost:3001/api/v1/account/recoverAccount/638e699e2aa64ddfcff47e53
+
+###
+
+// LOGIN MANAGEMENT
+
+// HTTP LOGIN | Username OK | Password OK
+POST http://localhost:3001/api/v1/account/login
+content-type: application/json
+
+{
+	"username": "testAccount",
+	"password": "testPassword"
+}
+
+###
+
+// HTTP LOGIN | Email OK | Password OK
+POST http://localhost:3001/api/v1/users/login
+content-type: application/json
+
+{
+	"email": "test-account@mail.com",
+	"password": "testPassword"
+}
+
+###
+
+// HTTP LOGIN | Username OK | Wrong Password
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"username": "testUsername",
+	"password": "wrongPassword"
+}
+
+###
+
+// HTTP LOGIN | Email OK | Wrong Password
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"email": "test@mail.com",
+	"password": "wrongPassword"
+}
+
+###
+
+// HTTP LOGIN | Wrong Username
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"username": "wrongUsername",
+	"password": "testPassword"
+}
+
+###
+
+// HTTP LOGIN | Wrong Email
+POST http://localhost:3001/api/v1/login
+content-type: application/json
+
+{
+	"email": "wrong@email.com",
+	"password": "testPassword"
+}

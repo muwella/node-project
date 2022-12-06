@@ -1,8 +1,0 @@
-// LOOKUP nodemailer
-
-# HTTP Confirm account from mail
-GET http://localhost:3001/api/v1/signup/confirm
-content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4MjI0MzIyZDFmMzI0M2JjMjAxOTQ1IiwiaWF0IjoxNjY5NDczMzMwLCJleHAiOjE2NzAwNzgxMzB9.u7Nb-cjrnA45pOnczHMfu-G2U1Quau5lijATsoMgP5w
-
-###

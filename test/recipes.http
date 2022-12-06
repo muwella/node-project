@@ -3,10 +3,10 @@
 # HTTP CREATE RECIPE
 POST http://localhost:3001/api/v1/recipes/new
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjcwMjYwODc4fQ.C3303bRBrUZFNFZpM01q-nA92vRwFy57cd4lyJaTBUw
 
 {
-	"name": "Another recipe 8"
+	"name": "New recipe shawtyy"
 }
 
 ###
@@ -14,7 +14,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2
 # HTTP GET RECIPES
 GET http://localhost:3001/api/v1/recipes/
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjcwMjYwODc4fQ.C3303bRBrUZFNFZpM01q-nA92vRwFy57cd4lyJaTBUw
 
 ###
 
@@ -52,8 +52,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2
 ###
 
 # HTTP DELETE RECIPE
-DELETE http://localhost:3001/api/v1/recipes/delete/63857a92601c57180e65563d
-content-type: application/json
+DELETE http://localhost:3001/api/v1/recipes/delete/63856d9f60686e61107219f9
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
 
 

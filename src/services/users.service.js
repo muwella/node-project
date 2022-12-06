@@ -43,6 +43,11 @@ class UsersService {
     }
   }
 
+  async user_exists(id) {
+    const user = await this.get_user_by_id(id)
+    return !empty(user)
+  }
+
   async compare_password(plaintextPassword, hash) {
     return await bcrypt.compare(plaintextPassword, hash);
   }
@@ -70,6 +75,15 @@ class UsersService {
   issue_JWT(id) {
     return jwt.sign({ "user_id": id }, process.env.PRIVATE_KEY)
   }
+  
+  async hash_password(password) {
+    return await bcrypt.hash(password, saltRounds)
+  }
+  
+  async create(user) {
+    user.password = await this.hash_password(user.password)
+    await new models.UserModel(user).save()
+  }
 
   async login(user_login) {
     const user_exists = await this.check_user_exists(user_login)
@@ -88,34 +102,6 @@ class UsersService {
     } else {
       return 'User does not exist'
     }
-  }
-
-  async hash_password(password) {
-    return await bcrypt.hash(password, saltRounds)
-  }
-
-  async create(user) {
-    // check if any required fields already exist
-    if (await this.username_taken(user.username)) {
-      throw new Error('Username already taken')
-    } else if (await this.email_taken(user.email)) {
-      throw new Error('Email address already taken')
-    }
-
-    const user_login = {
-      'username': user.username,
-      'email': user.email,
-      'password': user.password
-    }
-    
-    // hash password
-    user.password = await this.hash_password(user.password)
-
-    // save on DB
-    await new models.UserModel(user).save()
-
-    // login user
-    return await this.login(user_login)
   }
 
   async get_users() {
@@ -175,12 +161,12 @@ class UsersService {
   }
   
   async update(id, change) {
-    await models.UserModel.findByIdAndUpdate(id, change)
+    await models.UserModel.findByIdAndUpdate(id, change, { runValidators: true })
     return await this.get_user_by_id(id)
   }
 
   async delete(id) {
-    await models.UserModel.findByIdAndDelete(id)
+    await this.update(id, { active: false })
   }
 }
 

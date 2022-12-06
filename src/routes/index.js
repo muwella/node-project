@@ -1,21 +1,21 @@
 import express from 'express'
-import testRouter from './test.js'
-import loginRouter from './login.js'
-import usersRouter from './users.js'
-import recipesRouter from './recipes.js'
-import categoriesRouter from './categories.js'
+import account_router from './account.js'
+import users_router from './users.js'
+import recipes_router from './recipes.js'
+import categories_router from './categories.js'
+import planning_router from './planning.js'
+// import ingredientsRouter from './ingredients.js' // api/v2
 
 const app = express()
-
 const router = express.Router()
+
 // there can be several versions with different endpoints
 app.use('/api/v1', router)
 
-// WIP use planning
-router.use('/test', testRouter)
-router.use('/login', loginRouter)
-router.use('/users', usersRouter)
-router.use('/recipes', recipesRouter)
-router.use('/categories', categoriesRouter)
+router.use('/account', account_router)
+router.use('/users', users_router)
+router.use('/recipes', recipes_router)
+router.use('/categories', categories_router)
+router.use('/planning', planning_router)
 
 export default app

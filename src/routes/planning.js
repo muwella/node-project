@@ -1,9 +1,9 @@
 import express from 'express'
 import { log_error, error_handler } from '../middlewares/error.handler.js'
-import PlanningService from '../services/planning.service.js'
+// import PlanningService from '../services/planning.service.js'
 
 const router = express.Router()
-const service = new PlanningService()
+// const service = new PlanningService()
 
 // endpoints
 // WIP
@@ -49,3 +49,5 @@ router.get('/delete/:id', async (req, res) => {
     error_handler(err, 404, req, res)
 	}
 })
+
+export default router

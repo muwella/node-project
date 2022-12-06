@@ -6,7 +6,7 @@ const log_error = (err, req, res, next) => {
 
 const error_handler = (err, status, req, res, next) => {
 	res.status(status).json({
-		message: err.message
+		error: err.message
 	})
 }
 

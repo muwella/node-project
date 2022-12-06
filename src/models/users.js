@@ -28,5 +28,9 @@ export default {
   active: {
     type: Boolean,
     default: true
+  },
+  account_confirmed: {
+    type: Boolean,
+    default: true
   }
 }

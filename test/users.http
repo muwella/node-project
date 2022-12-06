@@ -1,48 +1,28 @@
 // PRODUCTION
 
-// HTTP CREATE USER
-POST http://localhost:3001/api/v1/users/new
-content-type: application/json
-
-{
-	"username": "testUsername",
-	"email": "test@mail.com",
-	"password": "testPassword"
-}
-
-###
-
 // HTTP GET USER (SELF)
 GET http://localhost:3001/api/v1/users/me
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
 
 ###
 
 // HTTP UPDATE USER
 PATCH http://localhost:3001/api/v1/users/me/update
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
 
 {
-	"name": "Test"
+	"name": "ada"
 }
 
-###
-
-// WIP what happens with recipes when you delete a user
-// HTTP DELETE USER
-DELETE http://localhost:3001/api/v1/users/me/delete
-content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
-
-###
+### -------------------- ###
 
 // DEVELOPTMENT
 
 // HTTP GET ALL USERS
 GET http://localhost:3001/api/v1/users/
-content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
 
 ### 
 
@@ -50,23 +30,30 @@ content-type: application/json
 // fields are added or removed on all documents
 PUT http://localhost:3001/api/v1/users/updateAll
 content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
 
 {
-	"new_field": {
-		"type": "unset",
+	"account_confirmed": {
+		"type": "set"
 	}
 }
 
 ###
 
-// HTTP DELETE ALL
-PUT http://localhost:3001/api/v1/users/deleteAll
-content-type: application/json
+// HTTP DELETE USER
+DELETE http://localhost:3001/api/v1/users/me/delete
 
 ###
 
+// HTTP DELETE ALL
+PUT http://localhost:3001/api/v1/users/deleteAll
+
+### -------------------- ###
+
 // FOR FUTURE VERSIONS
 
-// HTTP GET USERS FROM FRIENDS
+// HTTP ADD USER TO FRIENDS
 
-// HTTP DELETE USER FROM FRIENDS
+// HTTP GET FRIENDS
+
+// HTTP REMOVE USER FROM FRIENDS

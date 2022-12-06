@@ -31,8 +31,12 @@ class RecipesService {
   }
 
   async isCreator(recipe_id, user_id) {
-    const recipe = await this.get_recipe_by_id(recipe_id)
-    return recipe.creator == user_id
+    try {
+      const recipe = await this.get_recipe_by_id(recipe_id)
+      return recipe.creator == user_id
+    } catch(err) {
+      throw new Error('Recipe not found')
+    }
   }
 
   async create(body, id) {
