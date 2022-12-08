@@ -3,19 +3,25 @@ import { pathToRegexp } from 'path-to-regexp'
 // import UsersService from '../services/users.service.js';
 // const user_service = new UsersService()
 
-const no_token_urls = [
-	/(api\/v1\/account\/login)/i,
-	/(api\/v1\/account\/new\/)/i,
-	/(api\/v1\/account\/confirmation\/\w)/i,
-	/(api\/v1\/account\/recoverAccount\/\w)/i,
+const no_token_required_paths = [
+	/(\/api\/v1\/account\/login)/i,
+	/(\/api\/v1\/account\/new)/i,
+	/(\/api\/v1\/account\/confirmation\/\w)/i,
+	/(\/api\/v1\/account\/recoverAccount\/\w)/i,
 ]
 
-const verify_token = async (req, res, next) => {
-	const token_not_required = no_token_urls.some(regexp => {
-		return regexp.test(req.url)
+const path_requires_token = (url) => {
+	const paths_match = no_token_required_paths.some(regexp => {
+		return regexp.test(url)
 	})
+	
+	// if paths match, it doesn't require token
+	// if !paths_match, it requires token
+	return !paths_match
+}
 
-	if (!token_not_required) {
+const verify_token = async (req, res, next) => {
+	if ( path_requires_token(req.url) ) {
 		try {
 			const token = req.headers.authorization
 			res.locals.decoded = jwt.verify(token, process.env.PRIVATE_KEY);

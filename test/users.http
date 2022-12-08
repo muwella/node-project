@@ -3,17 +3,18 @@
 // HTTP GET USER (SELF)
 GET http://localhost:3001/api/v1/users/me
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MTU4ZTZiYjE4YzU5MjAwNmUyODRjIiwiaWF0IjoxNjcwNDY5ODg4fQ._UoDi-sJVfQ2dUSEMhW2tKnq1nk4Q6O0kOBjWDPj-wk
 
 ###
 
 // HTTP UPDATE USER
+// update can be "name" or "password", both strings
 PATCH http://localhost:3001/api/v1/users/me/update
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MTU4ZTZiYjE4YzU5MjAwNmUyODRjIiwiaWF0IjoxNjcwNDY5ODg4fQ._UoDi-sJVfQ2dUSEMhW2tKnq1nk4Q6O0kOBjWDPj-wk
 
 {
-	"name": "ada"
+	"name": "testy"
 }
 
 ### -------------------- ###

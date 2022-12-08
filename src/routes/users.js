@@ -13,7 +13,7 @@ const service = new UsersService()
 // get self
 router.get('/me', async (req, res) => {
   try {
-    const user = await service.get_user_me(req.headers.authorization)
+    const user = await service.get_user_me(res.locals.decoded.user_id)
     res.status(200).json(user)
   } catch (err) {
     log_error(err, req, res)

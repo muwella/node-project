@@ -85,36 +85,16 @@ class UsersService {
     await new models.UserModel(user).save()
   }
 
-  async login(user_login) {
-    const user_exists = await this.check_user_exists(user_login)
-
-    if (user_exists) {
-      const hashPassword = await this.get_hash_password(user_login)
-      const passwords_match = await this.compare_password(user_login.password, hashPassword)
-
-      if (passwords_match) {
-        const userDB = await this.get_user_for_token(user_login)
-
-        return this.issue_JWT(userDB._id)
-      } else {
-        return 'Wrong password'
-      }
-    } else {
-      return 'User does not exist'
-    }
-  }
-
   async get_users() {
     return await models.UserModel.find()
   }
 
-  async get_user_me(token) {
-    const decoded = jwt.decode(token)
-    return await models.UserModel.findOne({_id: decoded.user_id}, {password:0})
+  async get_user_me(id) {
+    return await models.UserModel.findOne({_id: id})
   }
 
   async get_user_by_id(id) {
-    return await models.UserModel.findOne({_id: id}, {password:0})
+    return await models.UserModel.findOne({_id: id})
   }
   
   async get_user_by_username(username) {
@@ -161,6 +141,15 @@ class UsersService {
   }
   
   async update(id, change) {
+    if (change.password) {
+      change.password = await bcrypt.hash(change.password, saltRounds)
+    }
+    
+    change = {
+      ...change,
+      update_date: Date.now()
+    }
+
     await models.UserModel.findByIdAndUpdate(id, change, { runValidators: true })
     return await this.get_user_by_id(id)
   }

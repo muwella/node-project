@@ -31,6 +31,6 @@ export default {
   },
   account_confirmed: {
     type: Boolean,
-    default: true
+    default: false
   }
 }

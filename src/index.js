@@ -5,10 +5,11 @@ import verify_token from './middlewares/token.js'
 import routes from './routes/index.js'
 import dbConnection from './database.js'
 
+// 192.168.0.76
 
 dotenv.config()
 const app = express()
-const port = 3001
+const port = 6006
 
 app.use(express.json())
 app.use(verify_token)

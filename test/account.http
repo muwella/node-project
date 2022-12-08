@@ -8,8 +8,8 @@ POST http://localhost:3001/api/v1/account/new
 content-type: application/json
 
 {
-	"username": "asdasdad",
-	"email": "ascfdasfafcav@mail.com",
+	"username": "test",
+	"email": "test@mail.com",
 	"password": "testPassword"
 }
 
@@ -17,20 +17,20 @@ content-type: application/json
 
 # HTTP CONFIRM ACCOUNT
 // LATER user cannot create recipes until account is confirmed
-PATCH http://localhost:3001/api/v1/account/confirmation/638e699e2aa64ddfcff47e53
+PATCH http://localhost:3001/api/v1/account/confirmation/638ffd43a76fd0d67b9fd89d
 
 ###
 
 // HTTP DEACTIVATE ACCOUNT
 // LATER after deactivation user gets an email with recover account link
 PATCH http://localhost:3001/api/v1/account/deactivate
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZTY5OWUyYWE2NGRkZmNmZjQ3ZTUzIiwiaWF0IjoxNjcwMjc3NTkxfQ.IGKEgw3HtyGJNgiuMVVcDLhxH8Lcl-QrP34s06zKPw0
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZmZkNDNhNzZmZDBkNjdiOWZkODlkIiwiaWF0IjoxNjcwMzgxMTIyfQ.jN7PtSxEhDLWxQX0Zi5AkGRhmUfoF74XB9PmPjL7KX0
 
 ###
 
 // HTTP RECOVER ACCOUNT (ACTIVATE)
 // LATER user should get this link on mail
-PATCH http://localhost:3001/api/v1/account/recoverAccount/638e699e2aa64ddfcff47e53
+PATCH http://localhost:3001/api/v1/account/recoverAccount/638ffd43a76fd0d67b9fd89d
 
 ###
 
@@ -41,36 +41,36 @@ POST http://localhost:3001/api/v1/account/login
 content-type: application/json
 
 {
-	"username": "testAccount",
+	"username": "test",
 	"password": "testPassword"
 }
 
 ###
 
 // HTTP LOGIN | Email OK | Password OK
-POST http://localhost:3001/api/v1/users/login
+POST http://localhost:3001/api/v1/account/login
 content-type: application/json
 
 {
-	"email": "test-account@mail.com",
+	"email": "test@mail.com",
 	"password": "testPassword"
 }
 
 ###
 
 // HTTP LOGIN | Username OK | Wrong Password
-POST http://localhost:3001/api/v1/login
+POST http://localhost:3001/api/v1/account/login
 content-type: application/json
 
 {
-	"username": "testUsername",
+	"username": "test",
 	"password": "wrongPassword"
 }
 
 ###
 
 // HTTP LOGIN | Email OK | Wrong Password
-POST http://localhost:3001/api/v1/login
+POST http://localhost:3001/api/v1/account/login
 content-type: application/json
 
 {
@@ -81,7 +81,7 @@ content-type: application/json
 ###
 
 // HTTP LOGIN | Wrong Username
-POST http://localhost:3001/api/v1/login
+POST http://localhost:3001/api/v1/account/login
 content-type: application/json
 
 {
@@ -92,7 +92,7 @@ content-type: application/json
 ###
 
 // HTTP LOGIN | Wrong Email
-POST http://localhost:3001/api/v1/login
+POST http://localhost:3001/api/v1/account/login
 content-type: application/json
 
 {
