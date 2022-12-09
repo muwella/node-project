@@ -7,23 +7,7 @@ const saltRounds = 10
 
 // users management
 class UsersService {
-  constructor() {
-    // this.generate()
-  }
-
-  async generate() {
-    const limit = 1
-    
-    for (let i = 0; i < limit; i++) {      
-      const user = new models.UserModel({
-        username: 'muwella',
-        email: 'marielabrascon@gmail.com',
-        password: await bcrypt.hash('someVerySecurePassword', saltRounds)
-      })
-      
-      // await user.save()
-    }
-  }
+  // PRODUCTION
 
   async username_taken(username) {
     const is_taken = !empty(await this.get_user_by_username(username))
@@ -76,15 +60,6 @@ class UsersService {
     return jwt.sign({ "user_id": id }, process.env.PRIVATE_KEY)
   }
   
-  async hash_password(password) {
-    return await bcrypt.hash(password, saltRounds)
-  }
-  
-  async create(user) {
-    user.password = await this.hash_password(user.password)
-    await new models.UserModel(user).save()
-  }
-
   async get_users() {
     return await models.UserModel.find()
   }
@@ -112,7 +87,44 @@ class UsersService {
   async get_user_by_email_with_password(email) {
     return await models.UserModel.findOne({email: email})
   }
+  
+  async update(id, change) {
+    if (change.password) {
+      change.password = await bcrypt.hash(change.password, saltRounds)
+    }
+    
+    change = {
+      ...change,
+      update_date: Date.now()
+    }
 
+    await models.UserModel.findByIdAndUpdate(id, change, { runValidators: true })
+    return await this.get_user_by_id(id)
+  }
+
+  async delete(id) {
+    await this.update(id, { active: false })
+  }
+
+  // DEVELOPMENT
+
+  constructor() {
+    // this.generate()
+  }
+
+  async generate() {
+    const limit = 1
+    
+    for (let i = 0; i < limit; i++) {      
+      const user = new models.UserModel({
+        username: 'muwella',
+        email: 'marielabrascon@gmail.com',
+        password: await bcrypt.hash('someVerySecurePassword', saltRounds)
+      })
+      
+      // await user.save()
+    }
+  }
 
   // NOTE UserSchema has to match with attempted changes
   // to $set: field on schema with default value
@@ -138,24 +150,6 @@ class UsersService {
       }
     }
     return await models.UserModel.find()
-  }
-  
-  async update(id, change) {
-    if (change.password) {
-      change.password = await bcrypt.hash(change.password, saltRounds)
-    }
-    
-    change = {
-      ...change,
-      update_date: Date.now()
-    }
-
-    await models.UserModel.findByIdAndUpdate(id, change, { runValidators: true })
-    return await this.get_user_by_id(id)
-  }
-
-  async delete(id) {
-    await this.update(id, { active: false })
   }
 }
 

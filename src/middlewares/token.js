@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-import { pathToRegexp } from 'path-to-regexp'
 // import UsersService from '../services/users.service.js';
 // const user_service = new UsersService()
 
@@ -26,8 +25,7 @@ const verify_token = async (req, res, next) => {
 			const token = req.headers.authorization
 			res.locals.decoded = jwt.verify(token, process.env.PRIVATE_KEY);
 		} catch(err) {
-			res.status(400).json(err)
-			res.end()
+			return res.status(400).json(err)
 		}
 	}
 	next()

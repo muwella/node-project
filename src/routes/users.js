@@ -14,7 +14,12 @@ const service = new UsersService()
 router.get('/me', async (req, res) => {
   try {
     const user = await service.get_user_me(res.locals.decoded.user_id)
-    res.status(200).json(user)
+    
+    res.status(200).json({
+      success: true,
+      message: "User received",
+      data: {user}})
+
   } catch (err) {
     log_error(err, req, res)
     error_handler(err, 404, req, res) 
@@ -26,7 +31,12 @@ router.patch('/me/update', async (req, res) => {
   try {
     const token = res.locals.decoded
     const user = await service.update(token.user_id, req.body)
-    res.status(200).json(user)
+    
+    res.status(200).json({
+      success: true,
+      message: "User updated",
+      data: {user}})
+  
   } catch(err) {
     log_error(err, req, res)
     error_handler(err, 400, req, res)
@@ -39,7 +49,9 @@ router.patch('/me/update', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const user = await service.get_user_by_id(req.params.id)
+    
     res.status(200).json(user)
+  
   } catch (err) {
     log_error(err, req, res)
   }

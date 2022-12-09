@@ -1,20 +1,20 @@
 // PRODUCTION
 
 // HTTP GET USER (SELF)
-GET http://localhost:3001/api/v1/users/me
+GET http://localhost:6006/api/v1/users/me
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MTU4ZTZiYjE4YzU5MjAwNmUyODRjIiwiaWF0IjoxNjcwNDY5ODg4fQ._UoDi-sJVfQ2dUSEMhW2tKnq1nk4Q6O0kOBjWDPj-wk
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
 
 ###
 
 // HTTP UPDATE USER
 // update can be "name" or "password", both strings
-PATCH http://localhost:3001/api/v1/users/me/update
+PATCH http://localhost:6006/api/v1/users/me/update
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MTU4ZTZiYjE4YzU5MjAwNmUyODRjIiwiaWF0IjoxNjcwNDY5ODg4fQ._UoDi-sJVfQ2dUSEMhW2tKnq1nk4Q6O0kOBjWDPj-wk
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
 
 {
-	"name": "testy"
+	"name": "test"
 }
 
 ### -------------------- ###

@@ -12,7 +12,23 @@ const app = express()
 const port = 6006
 
 app.use(express.json())
+
+// middlewares
 app.use(verify_token)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method'
+  )
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PATCH, OPTIONS, PUT, DELETE'
+  )
+  res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE')
+  next()
+})
+
 app.use('/', routes)
 
 // middleware verify_token used to be global

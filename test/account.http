@@ -4,12 +4,12 @@
 
 // HTTP CREATE ACCOUNT
 // LATER after creation user gets a confirmation mail
-POST http://localhost:3001/api/v1/account/new
+POST http://localhost:6006/api/v1/account/new
 content-type: application/json
 
 {
-	"username": "test",
-	"email": "test@mail.com",
+	"username": "11111",
+	"email": "wertedgf333333vdc@mail.com",
 	"password": "testPassword"
 }
 
@@ -37,18 +37,18 @@ PATCH http://localhost:3001/api/v1/account/recoverAccount/638ffd43a76fd0d67b9fd8
 // LOGIN MANAGEMENT
 
 // HTTP LOGIN | Username OK | Password OK
-POST http://localhost:3001/api/v1/account/login
+POST http://localhost:6006/api/v1/account/login
 content-type: application/json
 
 {
-	"username": "test",
+	"username": "sdfghnb333v333c",
 	"password": "testPassword"
 }
 
 ###
 
 // HTTP LOGIN | Email OK | Password OK
-POST http://localhost:3001/api/v1/account/login
+POST http://localhost:6006/api/v1/account/login
 content-type: application/json
 
 {
