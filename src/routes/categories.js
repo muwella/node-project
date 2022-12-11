@@ -1,51 +1,86 @@
 import express from 'express'
-import { log_error, error_handler } from '../middlewares/error.handler.js'
-import CategoriesService from './../services/categories.service.js'
-import empty from 'is-empty'
+import { error_handler } from '../middlewares/error.handler.js'
+import CategoryManager from '../services/categories.manager.js'
+import response from '../resources/response.js'
+import isEmpty from 'is-empty'
 
 const router = express.Router()
-const service = new CategoriesService()
+const category_manager = new CategoryManager()
 
+// PRODUCTION
 
-// endpoints
+// create category
+router.post('/new', async (req, res) => {
+  try {
+    const token = res.locals.decoded
+    const category = req.body
+    category.creator_id = token.user_id
 
-router.get('/', async (req, res) => {
-  const categories = await service.get_categories()
+    const name_already_used = await category_manager.get_category_by_name(category.name)
+    if (name_already_used) {
+      return response(res, 400, 'Category name already in use', null)
+    }
 
-  res.status(200).json({categories})
-})
+    await category_manager.create(category)
 
+    const categoryDB = await category_manager.get_category_by_name(category.name)
+    response(res, 201, 'Category created', categoryDB)
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
-  
-  const category = await service.get_category_by_id(id)
-
-  if (empty(category)) {
-    res.status(404).json({
-      message: "category not found"
-    })
-  } else {
-    res.status(200).json(category)
+  } catch(err) {
+    error_handler(err, 400, req, res)
   }
 })
 
 
-router.post('/new', async (req, res) => {
-  const body = req.body
+// get categories
+router.get('/', async (req, res) => {
+  try {
+    const token = res.locals.decoded
+  
+    const categories = await category_manager.get_categories(token.user_id)
+  
+    response(res, 200, 'Categories received', categories)
 
-  res.status(201).json({
-    message: 'category info received',
-    data: body
+  } catch(err) {
+    error_handler(err, 400, req, res)
+  }
+})
+
+
+// update category
+router.patch('/update/:id', async (req, res) => {
+  try {
+    const { id } = req.params.id
+    const change = req.body
+    
+    // WIP chequear que el usuario sea dueño de la categoria
+      // que esta queriendo actualizar
+    const token = res.locals.decoded
+  
+    const categories = await category_manager.update(id, change)
+  
+    response(res, 200, 'Categories received', categories)
+
+  } catch(err) {
+    error_handler(err, 400, req, res)
+  }
+})
+
+
+// delete category
+router.delete('/delete/:id', async (req, res) => {
+  const { id } = req.params
+
+  res.json({
+    message: 'deleted',
+    id
   })
 })
 
 
-router.put('/update/:id', async (req, res) => {
-})
+// DEVELOPMENT
 
-
-router.patch('/partialUpdate/:id', async (req, res) => {
+router.patch('/updateAll', async (req, res) => {
   const { id } = req.params
   const body = req.body
 
@@ -57,13 +92,5 @@ router.patch('/partialUpdate/:id', async (req, res) => {
 })
 
 
-router.delete('/delete/:id', async (req, res) => {
-  const { id } = req.params
-
-  res.json({
-    message: 'deleted',
-    id
-  })
-})
 
 export default router

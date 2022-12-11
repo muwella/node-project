@@ -1,19 +1,44 @@
 // LOOKUP nodemailer
 
-// ACCOUNT MANAGEMENT
+// CREATE ACCOUNT MANAGEMENT
 
-// HTTP CREATE ACCOUNT
+// HTTP CREATE ACCOUNT OK
 // LATER after creation user gets a confirmation mail
 POST http://localhost:6006/api/v1/account/new
 content-type: application/json
 
 {
-	"username": "11111",
-	"email": "wertedgf333333vdc@mail.com",
-	"password": "testPassword"
+	"username": "unanueva",
+	"email": "unanueva@mail.com",
+	"password": "Password123$"
 }
 
 ###
+
+// HTTP CREATE ACCOUNT | Username not available
+POST http://localhost:6006/api/v1/account/new
+content-type: application/json
+
+{
+	"username": "muwella",
+	"email": "availableEmail@mail.com",
+	"password": "somethinG123"
+}
+
+###
+
+// HTTP CREATE ACCOUNT | Email not available
+POST http://localhost:6006/api/v1/account/new
+content-type: application/json
+
+{
+	"username": "availableUsername",
+	"email": "marielabrascon@mail.com",
+	"password": "somethinG123"
+}
+
+###
+
 
 # HTTP CONFIRM ACCOUNT
 // LATER user cannot create recipes until account is confirmed
@@ -41,8 +66,8 @@ POST http://localhost:6006/api/v1/account/login
 content-type: application/json
 
 {
-	"username": "sdfghnb333v333c",
-	"password": "testPassword"
+	"username": "unanueva",
+	"password": "Password123$"
 }
 
 ###
@@ -59,7 +84,7 @@ content-type: application/json
 ###
 
 // HTTP LOGIN | Username OK | Wrong Password
-POST http://localhost:3001/api/v1/account/login
+POST http://localhost:6006/api/v1/account/login
 content-type: application/json
 
 {
@@ -81,7 +106,7 @@ content-type: application/json
 ###
 
 // HTTP LOGIN | Wrong Username
-POST http://localhost:3001/api/v1/account/login
+POST http://localhost:6006/api/v1/account/login
 content-type: application/json
 
 {

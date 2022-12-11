@@ -1,7 +1,7 @@
 import models from '../models/index.js'
 import empty from 'is-empty'
-import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 
 const saltRounds = 10
 
@@ -89,10 +89,6 @@ class UsersService {
   }
   
   async update(id, change) {
-    if (change.password) {
-      change.password = await bcrypt.hash(change.password, saltRounds)
-    }
-    
     change = {
       ...change,
       update_date: Date.now()

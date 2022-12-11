@@ -1,30 +1,46 @@
-# HTTP get categories
-GET http://localhost:3001/api/v1/categories/
+// PRODUCTION
+
+// HTTP GET CATEGORIES
+GET http://localhost:6006/api/v1/categories/
 content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
 
 ### 
 
-// NOTE no se usa
-# get category by id
-# GET http://localhost:3001/api/v1/categories/636e98a4847f5d6c2d6aaae5
-# content-type: application/json
-
-###
-
-# HTTP create category
-POST http://localhost:3001/api/v1/categories/new
+// HTTP create category
+POST http://localhost:6006/api/v1/categories/new
 content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
 
 {
-	"name": "Party",
-	"creator_id": "637c32a01bb1e745c5fac1df"
+	"name": "anothercategor222y32323"
 }
 
 ###
 
-# HTTP update all (developtment)
+// HTTP update category
+PATCH http://localhost:6006/api/v1/categories/update/6396656b57e25f9d5ce7feb7
+content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+
+{
+	"name": "Party food"
+}
+
+###
+
+// HTTP delete category
+DELETE http://localhost:6006/api/v1/categories/delete/636e98a4847f5d6c2d6aaae5
+content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+
+###
+
+// DEVELOPMENT
+
+// HTTP update all (developtment)
 # fields are added or removed on all documents
-PUT http://localhost:3001/api/v1/categories/updateAll
+PUT http://localhost:6006/api/v1/categories/updateAll
 content-type: application/json
 
 {
@@ -34,17 +50,3 @@ content-type: application/json
 }
 
 ###
-
-# HTTP update category
-PATCH http://localhost:3001/api/v1/categories/update/636e98a4847f5d6c2d6aaae5
-content-type: application/json
-
-{
-	"name": "Party food"
-}
-
-###
-
-# HTTP delete category
-DELETE http://localhost:3001/api/v1/categories/delete/636e98a4847f5d6c2d6aaae5
-content-type: application/json

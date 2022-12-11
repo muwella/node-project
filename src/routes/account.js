@@ -3,6 +3,7 @@ import { error_handler } from '../middlewares/error.handler.js'
 import UsersService from '../services/users.service.js'
 import AccountManager from '../services/account.manager.js'
 import response from '../resources/response.js'
+import isEmpty from 'is-empty'
 
 const router = express.Router()
 const user_service = new UsersService()
@@ -13,26 +14,28 @@ router.post('/new', async (req, res) => {
   try {
     const user = req.body
 
-    const credentials_are_available = await account_manager.credentials_are_available(user)
-
-    for (credential in user) {
-      if (await account_manager.is_invalid(credential)) {
-        return response(res, 400, `Please enter a valid ${credential}`, null)
-      }
+    const missing_credentials = account_manager.check_credentials_existence(user)
+    console.log('missing_credentials ', missing_credentials)
+    if ( !isEmpty(missing_credentials) ) {
+      return response(res, 400, 'Credentials missing', missing_credentials)
     }
     
-    if (credentials_are_available) {
-      await account_manager.create(user)
+    const unavailable_credentials = await account_manager.check_credentials_availability(user)
+    console.log('unavailable_credentials ', unavailable_credentials)
+    if ( !isEmpty(unavailable_credentials) ) {
+      return response(res, 400, 'Credentials unavailable', unavailable_credentials)
     }
 
-    user = await user_service.get_user_by_username(user.username)
-
-    if (user) {
-      response(res, 201, 'Account created', null)
-    } else {
-      response(res, 400, 'Error creating account', null)
+    const syntax_error = account_manager.check_credentials_syntax(user)
+    console.log('syntax_error ', syntax_error)
+    if ( !isEmpty(syntax_error) ) {
+      return response(res, 400, 'Invalid credentials syntaxis', syntax_error)
     }
-  
+
+    await account_manager.create(user)
+
+    response(res, 201, 'Account created', null)
+    
   } catch(err) {
     error_handler(err, 400, req, res)
   }
@@ -103,12 +106,30 @@ router.patch('/recoverAccount/:id', async (req, res) => {
 // login
 router.post('/login', async (req, res) => {
 	try {
-		const token = await account_manager.login(req.body)
+    const user_login = req.body
 
-    if (token) {
-      response(res, 200, 'Logged in successfully, received JWT', token)
+    console.log(user_login)
+    
+    const user_exists = await user_service.check_user_exists(user_login)
+    
+    console.log(user_exists)
+    
+    if (user_exists) {
+      const hashPassword = await user_service.get_hash_password(user_login)
+      const passwords_match = await user_service.compare_password(user_login.password, hashPassword)
+      
+      console.log(passwords_match)
+      if (passwords_match) {
+        const userDB = await user_service.get_user_for_token(user_login)
+        
+        const token = account_manager.login(userDB._id)
+        console.log(token)
+        response(res, 200, 'Logged in successfully, received JWT', token)
+      } else {
+        return response(res, 400, 'Wrong password', null)
+      }
     } else {
-      response(res, 400, 'Error logging in', null)
+      return response(res, 404, 'User does not exist', null)
     }
 
 	} catch (err) {
