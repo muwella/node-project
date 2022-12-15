@@ -41,6 +41,8 @@ router.patch('/me/update', async (req, res) => {
     log_error(err, req, res)
     error_handler(err, 400, req, res)
   }
+
+  // something
 })
 
 
