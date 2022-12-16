@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt'
 const saltRounds = 10
 
 // users management
-class UsersService {
+class UserService {
   // PRODUCTION
 
   async username_taken(username) {
@@ -149,4 +149,4 @@ class UsersService {
   }
 }
 
-export default UsersService
+export default UserService

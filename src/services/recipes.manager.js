@@ -2,9 +2,8 @@ import models from '../models/index.js'
 import { faker } from '@faker-js/faker'
 import empty from 'is-empty'
 
-
 // recipes management
-class RecipesService {
+class RecipeService {
   constructor() {
     // this.generate()
   }
@@ -26,38 +25,36 @@ class RecipesService {
         update_date: faker.date.recent(),
       })
       
-      await recipe.save()
+      // await recipe.save()
     }
   }
 
-  async isCreator(recipe_id, user_id) {
-    try {
-      const recipe = await this.get_recipe_by_id(recipe_id)
-      return recipe.creator == user_id
-    } catch(err) {
-      throw new Error('Recipe not found')
-    }
+  // async isCreator(recipe_id, user_id) {
+  //   try {
+  //     const recipe = await this.get_recipe_by_id(recipe_id)
+  //     return recipe.creator == user_id
+  //   } catch(err) {
+  //     throw new Error('Recipe not found')
+  //   }
+  // }
+
+  async create(recipe) {
+    return await new models.RecipeModel(recipe).save()
   }
 
-  async create(body, id) {
-    const recipe = {
-      ...body,
-      creator: id
-    }
-    const recipeInDB = await new models.RecipeModel(recipe).save()
-    return recipeInDB
-  }
-
-  async create_filter(filter_input) {
+  create_filter(query, id) {
     const filter = {
-      creator: filter_input.id,
-      name: { $regex: filter_input.search_text, $options: 'i' }
+      'creator_id': id
+    }
+
+    if (query.category){
+      filter.category = category
+    }
+    
+    if (query.search_text){
+      filter.name = { $regex: query.search_text, $options: 'i' }
     }
   
-    if (filter_input.category) {
-      filter.category = filter_input.category
-    }
-
     return filter
   }
 
@@ -67,6 +64,10 @@ class RecipesService {
 
   async get_recipe_by_id(id) {
     return await models.RecipeModel.findById(id)
+  }
+
+  async get_recipe_by_name(name) {
+    return await models.RecipeModel.findOne({name: name})
   }
 
   get_random_recipe(recipes) {
@@ -112,10 +113,6 @@ class RecipesService {
   async delete(id) {
     await models.RecipeModel.findByIdAndDelete(id)
   }
-
-  async delete_all() {
-
-  }
 }
 
-export default RecipesService
+export default RecipeService

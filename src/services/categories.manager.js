@@ -21,7 +21,7 @@ class CategoryManager {
   }
 
   async create(category) {
-    await new models.CategoryModel(category).save()
+    return await new models.CategoryModel(category).save()
   }
 
   async get_categories(user_id) {
@@ -43,12 +43,11 @@ class CategoryManager {
       update_date: Date.now()
     }
 
-    await models.CategoryModel.findByIdAndUpdate(id, change, { runValidators: true })
-    return await this.get_category_by_id(id)
+    return await models.CategoryModel.findByIdAndUpdate(id, change, { runValidators: true })
   }
 
   async delete(id) {
-    await models.CategoryModel.findByIdAndDelete(id)
+    return await models.CategoryModel.findByIdAndDelete(id)
   }
 }
 

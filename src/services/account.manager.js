@@ -1,10 +1,10 @@
 import models from '../models/index.js'
-import UsersService from './users.service.js'
+import UserService from './users.manager.js'
 import isEmpty from 'is-empty'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-const user_service = new UsersService()
+const user_service = new UserService()
 
 class AccountManager {
   check_credentials_existence(user) {    

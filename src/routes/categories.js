@@ -2,13 +2,14 @@ import express from 'express'
 import { error_handler } from '../middlewares/error.handler.js'
 import CategoryManager from '../services/categories.manager.js'
 import response from '../resources/response.js'
-import isEmpty from 'is-empty'
 
 const router = express.Router()
 const category_manager = new CategoryManager()
 
 // PRODUCTION
 
+// WIP syntax validator
+// WIP missing credentials validator
 // create category
 router.post('/new', async (req, res) => {
   try {
@@ -50,16 +51,24 @@ router.get('/', async (req, res) => {
 // update category
 router.patch('/update/:id', async (req, res) => {
   try {
-    const { id } = req.params.id
+    const token = res.locals.decoded
+    const id = req.params.id
     const change = req.body
     
-    // WIP chequear que el usuario sea dueño de la categoria
-      // que esta queriendo actualizar
-    const token = res.locals.decoded
+    let category = await category_manager.get_category_by_id(id)
+
+    if (!category) {
+      return response(res, 404, 'Category not found', null)
+    }
+
+    if (category.creator_id != token.user_id) {
+      return response(res, 403, 'You don\'t have permission to access this resource', null)
+    }
   
-    const categories = await category_manager.update(id, change)
-  
-    response(res, 200, 'Categories received', categories)
+    await category_manager.update(id, change)
+    category = await category_manager.get_category_by_id(id)
+
+    response(res, 200, 'Category updated', category)
 
   } catch(err) {
     error_handler(err, 400, req, res)
@@ -69,12 +78,29 @@ router.patch('/update/:id', async (req, res) => {
 
 // delete category
 router.delete('/delete/:id', async (req, res) => {
-  const { id } = req.params
+  try {
+    const token = res.locals.decoded
+    const id = req.params.id
 
-  res.json({
-    message: 'deleted',
-    id
-  })
+    const category = await category_manager.get_category_by_id(id)
+
+    console.log(category)
+    
+    if (!category) {
+      return response(res, 404, 'Category not found', null)
+    }
+    
+    if (category.creator_id != token.user_id) {
+      return response(res, 403, 'You don\'t have permission to access this resource', null)
+    }
+    
+    await category_manager.delete(id)
+    
+    return response(res, 200, 'Category deleted', category)
+
+  } catch (err) {
+    error_handler(err, 400, req, res)
+  }
 })
 
 

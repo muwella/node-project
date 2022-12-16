@@ -1,145 +1,159 @@
 import express from 'express'
-import { log_error, error_handler } from '../middlewares/error.handler.js'
-import RecipesService from './../services/recipes.service.js'
-import jwt from 'jsonwebtoken'
+import { error_handler } from '../middlewares/error.handler.js'
+import RecipeManager from './../services/recipes.manager.js'
+import response from '../resources/response.js'
 
 const router = express.Router()
-const service = new RecipesService()
-
-
-// endpoints
+const recipe_manager = new RecipeManager()
 
 // PRODUCTION
 
+// WIP syntax validator
+// WIP missing credentials validator
+// create recipe
 router.post('/new', async (req, res) => {
   try {
-    const decoded = jwt.decode(req.headers.authorization)
-    const recipe = await service.create(req.body, decoded.user_id)
+    const token = res.locals.decoded
+    const recipe = req.body
+    recipe.creator_id = token.user_id
 
-    res.status(201).json({
-      message: 'Recipe created',
-      data: recipe
-    })
+    const name_already_used = await recipe_manager.get_recipe_by_name(recipe.name)
+    if (name_already_used) {
+      return response(res, 400, 'Recipe name already in use', null)
+    }
+
+    await recipe_manager.create(recipe)
+
+    const recipeDB = await recipe_manager.get_recipe_by_name(recipe.name)
+    response(res, 201, 'Recipe created', recipeDB)
+
   } catch(err) {
-    res.status(400).json(err)
-  }
-})
-
-
-router.get('/', async (req, res) => {
-  const { category, search_text } = req.query
-  const token = jwt.decode(req.headers.authorization)
-  
-  const filter_input = {
-    'id': token.user_id
-  }
-  
-  if (category){
-    filter.category = category
-  }
-  
-  if (search_text){
-    filter_input.search_text = search_text
-  } else { 
-    filter_input.search_text = ''
-  }
-
-  const filter = await service.create_filter(filter_input)
-
-  try {
-    const recipes = await service.get_recipes(filter, token.user_id)
-    res.status(200).json(recipes)
-  } catch(err) {
-    log_error(err, req, res)
     error_handler(err, 400, req, res)
   }
 })
 
 
+// get recipes w/query
+router.get('/', async (req, res) => {
+  try {
+    const token = res.locals.decoded
+    
+    const filter = recipe_manager.create_filter(req.query, token.user_id)
+
+    const recipes = await recipe_manager.get_recipes(filter)
+
+    response(res, 200, 'Recipes received', recipes)
+
+  } catch (err) {
+    error_handler(err, 400, req, res)
+  }
+})
+
+
+// get recipe suggestions
 router.get('/suggestions', async (req, res) => {
-  const token = jwt.decode(req.headers.authorization)
-  
   try {
-    const suggestions = await service.get_suggestions(token.user_id)
-    res.status(200).json(suggestions)
+    const token = res.locals.decoded
+
+    const recipes = await recipe_manager.get_suggestions(token.user_id)
+    
+    response(res, 200, 'Recipe suggestions received', recipes)
+    
   } catch (err) {
-    log_error(err, req, res)
     error_handler(err, 404, req, res)
   }
 })
 
 
+// get 3 last added recipes
 router.get('/lastAdded', async (req, res) => {
-  const token = jwt.decode(req.headers.authorization)
-  
   try {
-    const suggestions = await service.get_last_added(token.user_id)
-    res.status(200).json(suggestions)
+    const token = res.locals.decoded
+
+    const recipes = await recipe_manager.get_last_added(token.user_id)
+    
+    response(res, 200, 'Three last added recipes received', recipes)
+
   } catch (err) {
-    log_error(err, req, res)
     error_handler(err, 404, req, res)
   }
 })
 
 
+// get recipe
 router.get('/:id', async (req, res) => {
-  const { id } = req.params
-  const token = jwt.decode(req.headers.authorization)
+  try {
+    const id = req.params.id
+    const token = res.locals.decoded
 
-  if ( await service.isCreator(id, token.user_id) ) {
-    try {
-      const recipe = await service.get_recipe_by_id(id)
-      res.status(200).json(recipe)
-    } catch (err) {
-      log_error(err, req, res)
-      error_handler(err, 404, req, res)
+    const recipe = await recipe_manager.get_recipe_by_id(id)
+
+    if (!recipe) {
+      return response(res, 404, 'Recipe not found', null)
     }
-  } else {
-    res.status(401)
+
+    if (recipe.creator_id != token.user_id) {
+      return response(res, 403, 'You don\'t have permission to access this resource', null)
+    }
+    
+    return response(res, 200, 'Recipe received', recipe)
+
+  } catch (err) {
+    error_handler(err, 400, req, res)
   }
 })
 
 
+// update recipe
 router.patch('/update/:id', async (req, res) => {
-  const { id } = req.params
-  const token = jwt.decode(req.headers.authorization)
-  
-  // update if the requester is the creator, otherwise 401 (Unauthorized)
-  if ( await service.isCreator(id, token.user_id) ) {
-    try {
-      const recipe = await service.update(id, req.body)
-      res.status(200).json(recipe)
-    } catch(err) {
-      log_error(err, req, res)
-      error_handler(err, 404, req, res)
+  try {
+    const token = res.locals.decoded
+    const id = req.params.id
+    const change = req.body
+
+    let recipe = await recipe_manager.get_recipe_by_id(id)
+
+    if (!recipe) {
+      return response(res, 404, 'Recipe not found', null)
     }
-  } else {
-    res.status(401)
+
+    if (recipe.creator_id != token.user_id) {
+      return response(res, 403, 'You don\'t have permission to access this resource', null)
+    }
+
+    await recipe_manager.update(id, change)
+    recipe = await recipe_manager.get_recipe_by_id(id)
+
+    response(res, 200, 'Recipe updated', recipe)
+
+  } catch (err) {
+    error_handler(err, 400, req, res)
   }
 })
 
 
+// delete recipe
 router.delete('/delete/:id', async (req, res) => {
-  const { id } = req.params
-  const token = jwt.decode(req.headers.authorization)
+  try {
+    const token = res.locals.decoded
+    const id = req.params.id
 
-  console.log(id)
-  console.log(token)
+    const recipe = await recipe_manager.get_recipe_by_id(id)
 
-  // delete if the requester is the creator, otherwise 401 (Unauthorized)
-  if ( await service.isCreator(id, token.user_id) ) {
-    try {
-      await service.delete(id)
-      res.status(200).json({
-        'message': 'Recipe deleted',
-        'recipe_id': id
-      })
-    } catch(err) {
-      log_error(err, req, res)
-      error_handler(err, 404, req, res)
+    if (!recipe) {
+      return response(res, 404, 'Recipe not found', null)
     }
-  } else {
-    res.status(401)
+
+    if (recipe.creator_id != token.user_id) {
+      return response(res, 403, 'You don\'t have permission to access this resource', null)
+    }
+    
+    await recipe_manager.delete(id)
+    
+    return response(res, 200, 'Recipe deleted', recipe)
+
+  } catch (err) {
+    error_handler(err, 400, req, res)
   }
 })
 

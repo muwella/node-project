@@ -1,12 +1,10 @@
 import express from 'express'
 import { error_handler } from '../middlewares/error.handler.js'
-import UsersService from '../services/users.service.js'
 import AccountManager from '../services/account.manager.js'
 import response from '../resources/response.js'
 import isEmpty from 'is-empty'
 
 const router = express.Router()
-const user_service = new UsersService()
 const account_manager = new AccountManager()
 
 // create account

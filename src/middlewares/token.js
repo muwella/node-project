@@ -1,6 +1,4 @@
 import jwt from 'jsonwebtoken'
-// import UsersService from '../services/users.service.js';
-// const user_service = new UsersService()
 
 const no_token_required_paths = [
 	/(\/api\/v1\/account\/login)/i,
@@ -30,24 +28,5 @@ const verify_token = async (req, res, next) => {
 	}
 	next()
 }
-
-// ** not working **
-
-// if no token received
-		// if (!token) {
-		// 	res.status(400).json(err.JWT_MISSING)
-		// 	res.end()
-		// }
-		
-		// if token has no user ID
-		// if (!decoded.user_id) {
-			// 	res.status(400).json(err.JWT_MISSING_USERID)
-			// 	next()
-			// }
-			
-			// // if no user matches with user ID
-			// const user = await user_service.get_user_by_id(decoded.user_id)
-			// if(empty(user) || !user.active) res.status(404).json(err.USER_NOT_FOUND)
-
 
 export default verify_token

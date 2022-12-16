@@ -1,24 +1,41 @@
 // PRODUCTION
 
-# HTTP CREATE RECIPE
-POST http://localhost:3001/api/v1/recipes/new
+// HTTP CREATE RECIPE
+POST http://localhost:6006/api/v1/recipes/new
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjcwMjYwODc4fQ.C3303bRBrUZFNFZpM01q-nA92vRwFy57cd4lyJaTBUw
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
 
 {
-	"name": "New recipe shawtyy"
+	"name": "recipe when we disco"
 }
 
 ###
 
-# HTTP GET RECIPES
-GET http://localhost:3001/api/v1/recipes/
-content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjcwMjYwODc4fQ.C3303bRBrUZFNFZpM01q-nA92vRwFy57cd4lyJaTBUw
+// HTTP GET RECIPES
+GET http://localhost:6006/api/v1/recipes/
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
 
 ###
 
-# HTTP GET RECIPE SUGGESTIONS
+// HTTP GET RECIPES | QUERY CATEGORY
+GET http://localhost:6006/api/v1/recipes?category=Party
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+
+###
+
+// HTTP GET RECIPES | QUERY SEARCH_TEXT
+GET http://localhost:6006/api/v1/recipes?search_text=oli
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+
+###
+
+// HTTP GET RECIPES | QUERY CATEGORY and SEARCH_TEXT
+GET http://localhost:6006/api/v1/recipes?category=Party&search_text=oli
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+
+###
+
+// HTTP GET RECIPE SUGGESTIONS
 GET http://localhost:3001/api/v1/recipes/suggestions
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
@@ -26,21 +43,21 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2
 ###
 
 # HTTP GET LAST ADDED RECIPES
-GET http://localhost:3001/api/v1/recipes/lastAdded
+GET http://localhost:6006/api/v1/recipes/lastAdded
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
 
 ###
 
 # HTTP GET RECIPE
-GET http://localhost:3001/api/v1/recipes/63856d9f60686e61107219f9
+GET http://localhost:6006/api/v1/recipes/63856d9f60686e61107219f9
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
 
 ###
 
 # HTTP UPDATE RECIPE
-PATCH http://localhost:3001/api/v1/recipes/update/63856d9f60686e61107219f9
+PATCH http://localhost:6006/api/v1/recipes/update/63856d9f60686e61107219f9
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
 
@@ -52,14 +69,14 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2
 ###
 
 # HTTP DELETE RECIPE
-DELETE http://localhost:3001/api/v1/recipes/delete/63856d9f60686e61107219f9
+DELETE http://localhost:6006/api/v1/recipes/delete/63856d9f60686e61107219f9
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4NTZjOTg2MDY4NmU2MTEwNzIxOWVkIiwiaWF0IjoxNjY5Njg4NDcyfQ.2Ce7p0zgDK6A182va_Am1WYDA7wTqWf4Q-UwRogQ0NM
 
 
 // DEVELOPMENT
 
 # HTTP UPDATE RECIPES
-PUT http://localhost:3001/api/v1/recipes/updateAll
+PUT http://localhost:6006/api/v1/recipes/updateAll
 content-type: application/json
 
 {
@@ -68,5 +85,5 @@ content-type: application/json
 ###
 
 # HTTP DELETE RECIPES
-PUT http://localhost:3001/api/v1/recipes/deleteAll
+PUT http://localhost:6006/api/v1/recipes/deleteAll
 content-type: application/json
