@@ -8,8 +8,6 @@ const category_manager = new CategoryManager()
 
 // PRODUCTION
 
-// WIP syntax validator
-// WIP missing credentials validator
 // create category
 router.post('/new', async (req, res) => {
   try {
@@ -17,9 +15,20 @@ router.post('/new', async (req, res) => {
     const category = req.body
     category.creator_id = token.user_id
 
-    const name_already_used = await category_manager.get_category_by_name(category.name)
+    const name_already_used = await category_manager.name_already_used(token.user_id, category.name)
+
+    if (!category.name) {
+      return response(res, 400, 'Missing name value', null)
+    }
+
     if (name_already_used) {
       return response(res, 400, 'Category name already in use', null)
+    }
+    
+    const syntax_success = await category_manager.check_name_syntax(category.name)
+    
+    if (!syntax_success) { 
+      return response(res, 400, 'Invalid category name', null)
     }
 
     await category_manager.create(category)
@@ -37,7 +46,7 @@ router.post('/new', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const token = res.locals.decoded
-  
+
     const categories = await category_manager.get_categories(token.user_id)
   
     response(res, 200, 'Categories received', categories)
@@ -61,13 +70,18 @@ router.patch('/update/:id', async (req, res) => {
       return response(res, 404, 'Category not found', null)
     }
 
+    const syntax_success = await category_manager.check_name_syntax(change.name)    
+    if (!syntax_success) { 
+      return response(res, 400, 'Invalid category name', null)
+    }
+
     if (category.creator_id != token.user_id) {
       return response(res, 403, 'You don\'t have permission to access this resource', null)
     }
-  
-    await category_manager.update(id, change)
-    category = await category_manager.get_category_by_id(id)
 
+    await category_manager.update(id, change)
+    
+    category = await category_manager.get_category_by_id(id)
     response(res, 200, 'Category updated', category)
 
   } catch(err) {

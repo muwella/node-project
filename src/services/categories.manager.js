@@ -20,6 +20,16 @@ class CategoryManager {
     // await dessert.save()
   }
 
+  async name_already_used(id, name) {
+    const user_categories = await this.get_categories(id)
+    return user_categories.some(category => category.name == name)
+  }
+
+  check_name_syntax(name) {
+    const name_regex = /[A-Za-z0-9_]/
+    return name_regex.test(name)
+  }
+
   async create(category) {
     return await new models.CategoryModel(category).save()
   }
@@ -35,7 +45,7 @@ class CategoryManager {
   async get_category_by_name(name) {
     return await models.CategoryModel.findOne({name: name})
   }
-    
+
   // NOTE only possible change is name
   async update(id, change) {
     change = {
