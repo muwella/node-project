@@ -22,6 +22,7 @@ const verify_token = async (req, res, next) => {
 		try {
 			const token = req.headers.authorization
 			res.locals.decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+			res.locals.user_id = res.locals.decoded.user_id
 		} catch(err) {
 			return res.status(400).json(err)
 		}

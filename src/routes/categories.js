@@ -1,34 +1,36 @@
 import express from 'express'
 import { error_handler } from '../middlewares/error.handler.js'
 import CategoryManager from '../services/categories.manager.js'
+import RecipeManager from '../services/recipes.manager.js'
 import response from '../resources/response.js'
 
 const router = express.Router()
 const category_manager = new CategoryManager()
+const recipe_manager = new RecipeManager()
 
 // PRODUCTION
 
 // create category
 router.post('/new', async (req, res) => {
   try {
-    const token = res.locals.decoded
+    const user_id = res.locals.user_id
     const category = req.body
-    category.creator_id = token.user_id
+    category.creator_id = user_id
 
-    const name_already_used = await category_manager.name_already_used(token.user_id, category.name)
+    const name_already_used = await category_manager.name_already_used(user_id, category.name)
 
     if (!category.name) {
-      return response(res, 400, 'Missing name value', null)
+      return response(res, 400, 'MISSING_VALUE_NAME', null)
     }
 
     if (name_already_used) {
-      return response(res, 400, 'Category name already in use', null)
+      return response(res, 400, 'CATEGORY_NAME_ALREADY_USED', null)
     }
     
     const syntax_success = await category_manager.check_name_syntax(category.name)
     
     if (!syntax_success) { 
-      return response(res, 400, 'Invalid category name', null)
+      return response(res, 400, 'INVALID_SYNTAX', category.name)
     }
 
     await category_manager.create(category)
@@ -105,9 +107,11 @@ router.delete('/delete/:id', async (req, res) => {
     }
     
     if (category.creator_id != token.user_id) {
-      return response(res, 403, 'You don\'t have permission to access this resource', null)
+      return response(res, 403, 'PERMISSION_DENIED', 'You don\'t have permission to access this resource')
     }
     
+    await recipe_manager.delete_category_from_recipes(id)
+
     await category_manager.delete(id)
     
     return response(res, 200, 'Category deleted', category)

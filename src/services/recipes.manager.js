@@ -37,7 +37,7 @@ class RecipeService {
   //     throw new Error('Recipe not found')
   //   }
   // }
-
+  
   async create(recipe) {
     return await new models.RecipeModel(recipe).save()
   }
@@ -60,6 +60,11 @@ class RecipeService {
 
   async get_recipes(filter) {
     return await models.RecipeModel.find(filter)
+  }
+
+  // NOTE for user_id + recipe.name case
+  async get_recipe(filter) {
+    return await models.RecipeModel.findOne(filter)
   }
 
   async get_recipe_by_id(id) {
@@ -108,6 +113,16 @@ class RecipeService {
 
   async update_all() {
 
+  }
+
+  async delete_category_from_recipes(id) {
+    const recipes = await this.get_recipes({category: id})
+
+    for (const recipe of recipes) {
+      const index = recipe.category.indexOf(id)
+      recipe.category.splice(index, 1)
+      this.update(recipe._id, {category: recipe.category})
+    }
   }
 
   async delete(id) {

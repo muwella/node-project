@@ -7,15 +7,15 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNm
 # authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
 
 {
-	"name": "Party2"
+	"name": "receta234567"
 }
 
 ###
 
 // HTTP GET CATEGORIES
 GET http://localhost:6006/api/v1/categories/
-# authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+# authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
 
 ### 
 
@@ -33,7 +33,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFj
 ###
 
 // HTTP DELETE CATEGORY
-DELETE http://localhost:6006/api/v1/categories/delete/639e439f6f59d43abeaedfcc
+DELETE http://localhost:6006/api/v1/categories/delete/639f838bf3792b69acdd119a
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
 
 ###

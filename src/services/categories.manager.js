@@ -26,8 +26,8 @@ class CategoryManager {
   }
 
   check_name_syntax(name) {
-    const name_regex = /[A-Za-z0-9_]/
-    return name_regex.test(name)
+    const regex = new RegExp("^[A-Za-z0-9_.,! ]+$")
+    return regex.test(name)
   }
 
   async create(category) {

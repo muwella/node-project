@@ -13,13 +13,21 @@ const recipe_manager = new RecipeManager()
 // create recipe
 router.post('/new', async (req, res) => {
   try {
-    const token = res.locals.decoded
+    const user_id = res.locals.user_id
     const recipe = req.body
-    recipe.creator_id = token.user_id
+    recipe.creator_id = user_id
 
-    const name_already_used = await recipe_manager.get_recipe_by_name(recipe.name)
+    // check if the user already has a recipe with recipe.name
+    const name_already_used = await recipe_manager.get_recipe({
+      creator_id: user_id,
+      name: recipe.name
+    })
+
+    console.log(user_id)
+    console.log(name_already_used)
+
     if (name_already_used) {
-      return response(res, 400, 'Recipe name already in use', null)
+      return response(res, 400, 'NAME_ALREADY_USED', 'Recipe name already in use')
     }
 
     await recipe_manager.create(recipe)
