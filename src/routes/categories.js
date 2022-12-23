@@ -33,7 +33,7 @@ router.post('/new', async (req, res) => {
 
     await category_manager.create(category)
 
-    const categoryDB = await category_manager.get_category_by_name(category.name)
+    const categoryDB = await category_manager.get_category_by_name_and_user_id(user_id, category.name)
     response(res, 201, 'Category created', categoryDB)
 
   } catch(err) {

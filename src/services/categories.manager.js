@@ -26,7 +26,7 @@ class CategoryManager {
     
     for (const category of categories) {
       const found = await this.get_category_by_id(category)
-      if (!found) {
+      if (!found || found.creator_id != user_id) {
         not_found.push(category)
       }
     }
@@ -88,6 +88,10 @@ class CategoryManager {
   
   async get_category_by_name(name) {
     return await models.CategoryModel.findOne({name: name})
+  }
+
+  async get_category_by_name_and_user_id(user_id, name) {
+    return await models.CategoryModel.findOne({name: name, creator_id: user_id})
   }
 
   // NOTE only possible change is name
