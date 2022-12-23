@@ -8,9 +8,9 @@ POST http://localhost:6006/api/v1/account/new
 content-type: application/json
 
 {
-	"username": "unanueva",
-	"email": "unanueva@mail.com",
-	"password": "Password123$"
+	"username": "muwella",
+	"email": "marielabrascon@mail.com",
+	"password": "3A84%pMHoygK"
 }
 
 ###
@@ -66,8 +66,8 @@ POST http://localhost:6006/api/v1/account/login
 content-type: application/json
 
 {
-	"username": "unanueva",
-	"password": "Password123$"
+	"username": "muwella",
+	"password": "3A84%pMHoygK"
 }
 
 ###

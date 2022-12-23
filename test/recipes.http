@@ -3,11 +3,11 @@
 // HTTP CREATE RECIPE
 POST http://localhost:6006/api/v1/recipes/new
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
-# authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNhMDljNjYxZmQwNDE2YmQxZTM0MWM5IiwiaWF0IjoxNjcxNDcxMTI3fQ.h8yw6iI9XvPBQwdfn7duhR2BGrnFsPsKKxMEWusZRWQ
 
 {
-	"name": "Another one"
+	"name": "Recipe",
+	"category": ["63a09c661fd0416bd1e341c9"]
 }
 
 ###
@@ -26,9 +26,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNm
 
 // HTTP GET RECIPES
 GET http://localhost:6006/api/v1/recipes/
-# authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
-
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNhMDljNjYxZmQwNDE2YmQxZTM0MWM5IiwiaWF0IjoxNjcxNDcxMTI3fQ.h8yw6iI9XvPBQwdfn7duhR2BGrnFsPsKKxMEWusZRWQ
 
 ###
 
@@ -84,8 +82,10 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNm
 ###
 
 # HTTP DELETE RECIPE
-DELETE http://localhost:6006/api/v1/recipes/delete/639bdb7793bf5d1e3cb4b8c5
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+DELETE http://localhost:6006/api/v1/recipes/delete/63a0a43d038a49fd1a946ad5
+# authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNhMDljNjYxZmQwNDE2YmQxZTM0MWM5IiwiaWF0IjoxNjcxNDcxMTI3fQ.h8yw6iI9XvPBQwdfn7duhR2BGrnFsPsKKxMEWusZRWQ
+
 
 // DEVELOPMENT
 

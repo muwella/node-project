@@ -1,21 +1,20 @@
 import models from '../models/index.js'
-import empty from 'is-empty'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import isEmpty from 'is-empty'
 
 const saltRounds = 10
 
-// users management
 class UserService {
   // PRODUCTION
 
   async username_taken(username) {
-    const is_taken = !empty(await this.get_user_by_username(username))
+    const is_taken = !isEmpty(await this.get_user_by_username(username))
     return is_taken
   }
 
   async email_taken(email) {
-    const is_taken = !empty(await this.get_user_by_email(email))
+    const is_taken = !isEmpty(await this.get_user_by_email(email))
     return is_taken
   }
   
@@ -28,8 +27,8 @@ class UserService {
   }
 
   async user_exists(id) {
-    const user = await this.get_user_by_id(id)
-    return !empty(user)
+    const exists = !isEmpty(await this.get_user_by_id(id))
+    return exists
   }
 
   async compare_password(plaintextPassword, hash) {

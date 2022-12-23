@@ -3,9 +3,11 @@ import { error_handler } from '../middlewares/error.handler.js'
 import AccountManager from '../services/account.manager.js'
 import response from '../resources/response.js'
 import isEmpty from 'is-empty'
+import UserService from '../services/users.manager.js'
 
 const router = express.Router()
 const account_manager = new AccountManager()
+const user_service = new UserService()
 
 // create account
 router.post('/new', async (req, res) => {
@@ -13,19 +15,16 @@ router.post('/new', async (req, res) => {
     const user = req.body
 
     const missing_credentials = account_manager.check_credentials_existence(user)
-    console.log('missing_credentials ', missing_credentials)
     if ( !isEmpty(missing_credentials) ) {
       return response(res, 400, 'Credentials missing', missing_credentials)
     }
     
     const unavailable_credentials = await account_manager.check_credentials_availability(user)
-    console.log('unavailable_credentials ', unavailable_credentials)
     if ( !isEmpty(unavailable_credentials) ) {
       return response(res, 400, 'Credentials unavailable', unavailable_credentials)
     }
 
     const syntax_error = account_manager.check_credentials_syntax(user)
-    console.log('syntax_error ', syntax_error)
     if ( !isEmpty(syntax_error) ) {
       return response(res, 400, 'Invalid credentials syntaxis', syntax_error)
     }
@@ -109,8 +108,6 @@ router.post('/login', async (req, res) => {
     console.log(user_login)
     
     const user_exists = await user_service.check_user_exists(user_login)
-    
-    console.log(user_exists)
     
     if (user_exists) {
       const hashPassword = await user_service.get_hash_password(user_login)

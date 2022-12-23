@@ -1,15 +1,17 @@
 import express from 'express'
 import { error_handler } from '../middlewares/error.handler.js'
-import RecipeManager from './../services/recipes.manager.js'
 import response from '../resources/response.js'
+import RecipeManager from './../services/recipes.manager.js'
+import CategoryManager from './../services/categories.manager.js'
+import isEmpty from 'is-empty'
+import categories from '../models/categories.js'
 
 const router = express.Router()
 const recipe_manager = new RecipeManager()
+const category_manager = new CategoryManager()
 
 // PRODUCTION
 
-// WIP syntax validator
-// WIP missing credentials validator
 // create recipe
 router.post('/new', async (req, res) => {
   try {
@@ -17,17 +19,25 @@ router.post('/new', async (req, res) => {
     const recipe = req.body
     recipe.creator_id = user_id
 
-    // check if the user already has a recipe with recipe.name
-    const name_already_used = await recipe_manager.get_recipe({
-      creator_id: user_id,
-      name: recipe.name
-    })
+    // check name existence
+    if (!recipe.name) {
+      return response(res, 400, 'MISSING_VALUE_NAME', null)
+    }
 
-    console.log(user_id)
-    console.log(name_already_used)
-
-    if (name_already_used) {
-      return response(res, 400, 'NAME_ALREADY_USED', 'Recipe name already in use')
+    const name_available = await recipe_manager.check_name_availability(user_id, recipe.name)
+    if (!name_available) {
+      return response(res, 400, 'RECIPE_NAME_ALREADY_USED', null)
+    }
+    
+    const syntax_success = await recipe_manager.check_name_syntax(recipe.name)
+    if (!syntax_success) { 
+      return response(res, 400, 'INVALID_SYNTAX', recipe.name)
+    }
+    
+    const check_categories = await category_manager.check_categories_existence(user_id, recipe.category)
+    
+    if (!check_categories.categories_exist) {
+      return response(res, 404, 'CATEGORY_DOES_NOT_EXIST', check_categories.categories_not_found)
     }
 
     await recipe_manager.create(recipe)

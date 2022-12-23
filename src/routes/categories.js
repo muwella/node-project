@@ -16,19 +16,17 @@ router.post('/new', async (req, res) => {
     const user_id = res.locals.user_id
     const category = req.body
     category.creator_id = user_id
-
-    const name_already_used = await category_manager.name_already_used(user_id, category.name)
-
+    
     if (!category.name) {
       return response(res, 400, 'MISSING_VALUE_NAME', null)
     }
-
-    if (name_already_used) {
+    
+    const name_available = await category_manager.check_name_availability(user_id, category.name)
+    if (!name_available) {
       return response(res, 400, 'CATEGORY_NAME_ALREADY_USED', null)
     }
     
     const syntax_success = await category_manager.check_name_syntax(category.name)
-    
     if (!syntax_success) { 
       return response(res, 400, 'INVALID_SYNTAX', category.name)
     }

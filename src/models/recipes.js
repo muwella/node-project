@@ -1,5 +1,7 @@
 import mongoose from "mongoose"
 
+// WIP change category to categories
+
 export default {
 	name: {
 		type: String,

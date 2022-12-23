@@ -7,7 +7,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNm
 # authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
 
 {
-	"name": "receta234567"
+	"name": "un minuto de silencio para mbappe que esta muerto"
 }
 
 ###
@@ -33,7 +33,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFj
 ###
 
 // HTTP DELETE CATEGORY
-DELETE http://localhost:6006/api/v1/categories/delete/639f838bf3792b69acdd119a
+DELETE http://localhost:6006/api/v1/categories/delete/639f88177affdb536348e16b
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5NjNiMDNmYjdjMjRlYjhmOGZmMWIwIiwiaWF0IjoxNjcwNzkwMDkyfQ.Ybu1dRflLqIAgEyvAt3bozZmjrLQ0J-uYsLvtvX6uuI
 
 ###

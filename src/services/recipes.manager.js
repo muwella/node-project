@@ -29,14 +29,21 @@ class RecipeService {
     }
   }
 
-  // async isCreator(recipe_id, user_id) {
-  //   try {
-  //     const recipe = await this.get_recipe_by_id(recipe_id)
-  //     return recipe.creator == user_id
-  //   } catch(err) {
-  //     throw new Error('Recipe not found')
-  //   }
-  // }
+  // returns True if name available
+  async check_name_availability(user_id, name) {
+    const user_recipes = await this.get_recipes({creator_id: user_id})
+    return !user_recipes.some(recipe => recipe.name == name)
+
+    // return await models.RecipeModel.find({
+    //   creator_id: user_id,
+    //   name: name
+    // })
+  }
+  
+  async check_name_syntax(name) {
+    const regex = new RegExp("^[A-Za-z0-9_.,! ]+$")
+    return regex.test(name)
+  }
   
   async create(recipe) {
     return await new models.RecipeModel(recipe).save()
