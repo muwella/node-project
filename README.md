@@ -12,4 +12,6 @@ It's ultimate goal it's to remove time loss and meal-prepping-centred worried th
 ## Run it
 Run the server in dev mode with:
 
+```
 $ npm run dev
+```
