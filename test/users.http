@@ -3,7 +3,7 @@
 // HTTP GET USER (SELF)
 GET http://localhost:6006/api/v1/users/me
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM5MjNhMDFjYmU1NjlhNDUwZjA3NWNiIiwiaWF0IjoxNjcwNTI3NTA5fQ.BMwKqQ6NSZigYjsOmUDM-6IqC2uAmB6PitW_3PnifMk
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNjNmVjNzUxZmE3MDFmNDI0MmMwMzVlIiwiaWF0IjoxNjczOTgxNDEzfQ.Dej25U5gjcudAx9jL7rKwNWET1oM9LgZL7nTLPzAG6g
 
 ###
 
