@@ -6,9 +6,15 @@ import jwt from 'jsonwebtoken'
 
 const user_service = new UserService()
 
+interface User {
+  username: string
+  email: string
+  password: string
+}
+
 class AccountManager {
-  check_credentials_existence(user) {    
-    const missing = []
+  check_credentials_existence(user: User) {    
+    const missing: string[] = []
 
     if (!user.username) {
       missing.push('Username')
@@ -24,7 +30,7 @@ class AccountManager {
   }
   
   async check_credentials_availability(user) {
-    const unavailable_credentials = []
+    const unavailable_credentials : string[] = []
 
     if (await user_service.username_taken(user.username)) {
       unavailable_credentials.push('Username')
@@ -41,7 +47,7 @@ class AccountManager {
     const email_regex = /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/
     const password_regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}/
     
-    const failed = []
+    const failed: string[] = []
 
     if (!username_regex.test(user.username)) {
       failed.push('Username')
@@ -66,8 +72,11 @@ class AccountManager {
     await new models.UserModel(user).save()
   }
   
+  // WIP get_private_key function
   login(id) {
-    return jwt.sign({ "user_id": id }, process.env.PRIVATE_KEY)
+    const private_key = process.env.PRIVATE_KEY
+    if (!private_key) { throw new Error('PRIVATE_KEY NOT FOUND') }
+    return jwt.sign({ "user_id": id }, private_key)
   }
 
 	async confirm(id) {
