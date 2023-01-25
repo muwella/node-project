@@ -1,8 +1,8 @@
-import 'colors'
+import colors from 'colors'
 import * as dotenv from 'dotenv'
 import express from 'express'
 import verify_token from './middlewares/token.js'
-import routes from './routes/index.js'
+import routes from './controllers/index.js'
 import dbConnection from './database.js'
 
 // LOOKUP joi for schemas
@@ -11,6 +11,7 @@ import dbConnection from './database.js'
 // 192.168.0.76
 
 dotenv.config()
+
 const app = express()
 const port = 6006
 
@@ -38,5 +39,5 @@ dbConnection()
 
 // start server
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`.brightCyan)
+  console.log(colors.cyan(`Server listening on port ${port}`))
 })

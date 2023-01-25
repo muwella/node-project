@@ -1,4 +1,8 @@
+// @ts-check
+
 import jwt from 'jsonwebtoken'
+// import { Request, Response } from 'express';
+
 
 const no_token_required_paths = [
 	/(\/api\/v1\/account\/login)/i,
@@ -21,7 +25,15 @@ const verify_token = async (req, res, next) => {
 	if ( path_requires_token(req.url) ) {
 		try {
 			const token = req.headers.authorization
-			res.locals.decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+
+			// check private key existence
+			const private_key = process.env.PRIVATE_KEY
+			if (!private_key) { throw new Error('PRIVATE_KEY NOT FOUND') }
+
+			// verify token
+			res.locals.decoded = jwt.verify(token, private_key);
+
+			// add user_id to locals for usage in functions
 			res.locals.user_id = res.locals.decoded.user_id
 		} catch(err) {
 			return res.status(400).json(err)

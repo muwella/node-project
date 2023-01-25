@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 
-// WIP change category to categories
+// WIP changed category to categories
+	// erase everything from the db
 
 export default {
 	name: {
@@ -8,12 +9,12 @@ export default {
 		required: true
 	},
 	ingredients: [String], // now it's words, then it'll be UUIDs
-	instructions: [String],
+	instructions: String,
 	creator_id: {
 		type: mongoose.Types.ObjectId,
 		required: [true, 'Creator ID required']
 	},
-	category: [mongoose.Types.ObjectId],
+	categories: [mongoose.Types.ObjectId],
 	creation_date: {
 		type: Date,
 		default: Date.now

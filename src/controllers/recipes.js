@@ -1,8 +1,8 @@
 import express from 'express'
 import { error_handler } from '../middlewares/error.handler.js'
 import response from '../resources/response.js'
-import RecipeManager from './../services/recipes.manager.js'
-import CategoryManager from './../services/categories.manager.js'
+import RecipeManager from '../services/recipes.manager.js'
+import CategoryManager from '../services/categories.manager.js'
 import isEmpty from 'is-empty'
 import categories from '../models/categories.js'
 

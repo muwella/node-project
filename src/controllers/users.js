@@ -1,3 +1,5 @@
+// @ts-check
+
 import express from 'express'
 import { log_error, error_handler } from '../middlewares/error.handler.js'
 import UserManager from '../services/users.manager.js'

@@ -62,7 +62,7 @@ class AccountManager {
     return failed
   }
   
-  async hash_password(password) {
+  async hash_password(password: string) {
     const saltRounds = 10
     return await bcrypt.hash(password, saltRounds)
   }
