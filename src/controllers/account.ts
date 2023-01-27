@@ -4,6 +4,7 @@ import AccountManager from '../services/account.manager.js'
 import response from '../resources/response.js'
 import isEmpty from 'is-empty'
 import UserService from '../services/users.manager.js'
+import { UserInCreate } from '../types/user.js'
 
 const router = express.Router()
 const account_manager = new AccountManager()
@@ -12,7 +13,7 @@ const user_service = new UserService()
 // create account
 router.post('/new', async (req, res) => {
   try {
-    const user = req.body
+    const user: UserInCreate = req.body
 
     const missing_credentials = account_manager.check_credentials_existence(user)
     if ( !isEmpty(missing_credentials) ) {

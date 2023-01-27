@@ -3,6 +3,7 @@ import UserService from './users.manager.js'
 import isEmpty from 'is-empty'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { UserInLogin } from '../types/user.js'
 
 const user_service = new UserService()
 
@@ -13,14 +14,11 @@ interface User {
 }
 
 class AccountManager {
-  check_credentials_existence(user: User) {    
+  check_credentials_existence(user: UserInLogin) {    
     const missing: string[] = []
 
     if (!user.username) {
       missing.push('Username')
-    }
-    if (!user.email) {
-      missing.push('Email')
     }
     if (!user.password) {
       missing.push('Password')
@@ -29,7 +27,7 @@ class AccountManager {
     return missing
   }
   
-  async check_credentials_availability(user) {
+  async check_credentials_availability(user: UserInLogin) {
     const unavailable_credentials : string[] = []
 
     if (await user_service.username_taken(user.username)) {

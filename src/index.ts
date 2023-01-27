@@ -1,7 +1,7 @@
-import colors from 'colors'
+import * as colors from 'colors'
 import * as dotenv from 'dotenv'
 import express from 'express'
-import verify_token from './middlewares/token.js'
+import { verify_token } from './middlewares/token.js'
 import routes from './controllers/index.js'
 import dbConnection from './database.js'
 

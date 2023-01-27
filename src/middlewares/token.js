@@ -21,7 +21,7 @@ const path_requires_token = (url) => {
 	return !paths_match
 }
 
-const verify_token = async (req, res, next) => {
+export const verify_token = async (req, res, next) => {
 	if ( path_requires_token(req.url) ) {
 		try {
 			const token = req.headers.authorization
@@ -41,5 +41,3 @@ const verify_token = async (req, res, next) => {
 	}
 	next()
 }
-
-export default verify_token
