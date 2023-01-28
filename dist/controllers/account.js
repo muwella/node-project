@@ -27,7 +27,7 @@ router.post('/new', async (req, res) => {
         response(res, 201, 'Account created', null);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // confirm account
@@ -44,7 +44,7 @@ router.patch('/confirmation/:id', async (req, res) => {
         }
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // deactivate account
@@ -62,7 +62,7 @@ router.patch('/deactivate', async (req, res) => {
         }
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // recover account
@@ -79,7 +79,7 @@ router.patch('/recoverAccount/:id', async (req, res) => {
         }
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // login
@@ -107,7 +107,7 @@ router.post('/login', async (req, res) => {
         }
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 export default router;

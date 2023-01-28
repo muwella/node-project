@@ -15,8 +15,7 @@ router.get('/', async (req, res) => {
   try {
 
   } catch(err) {
-		log_error(err, req, res)
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
 	}
 })
 
@@ -25,8 +24,7 @@ router.get('/new', async (req, res) => {
   try {
 
   } catch(err) {
-		log_error(err, req, res)
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
 	}
 })
 
@@ -35,8 +33,7 @@ router.get('/update/:id', async (req, res) => {
   try {
 
   } catch(err) {
-		log_error(err, req, res)
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
 	}
 })
 
@@ -45,8 +42,7 @@ router.get('/delete/:id', async (req, res) => {
   try {
 
   } catch(err) {
-		log_error(err, req, res)
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
 	}
 })
 

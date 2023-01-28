@@ -3,6 +3,7 @@ import user from './users.js';
 import recipe from './recipes.js';
 // import ingredient from './ingredients.js'
 import category from './categories.js';
+// FIXME ts(2345)
 const UserSchema = new Schema(user);
 const RecipeSchema = new Schema(recipe);
 const CategorySchema = new Schema(category);

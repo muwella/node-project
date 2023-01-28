@@ -29,7 +29,7 @@ router.post('/new', async (req, res) => {
         response(res, 201, 'Category created', categoryDB);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // get categories
@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
         response(res, 200, 'Categories received', categories);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // update category
@@ -65,7 +65,7 @@ router.patch('/update/:id', async (req, res) => {
         response(res, 200, 'Category updated', category);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // delete category
@@ -86,16 +86,14 @@ router.delete('/delete/:id', async (req, res) => {
         return response(res, 200, 'Category deleted', category);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // DEVELOPMENT
 router.patch('/updateAll', async (req, res) => {
-    const { id } = req.params;
     const body = req.body;
     res.json({
         message: 'partial update',
-        id,
         data: body
     });
 });

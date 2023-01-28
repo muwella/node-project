@@ -125,10 +125,6 @@ class RecipeService {
     return await this.get_recipe_by_id(id)
   }
 
-  async update_all() {
-
-  }
-
   async delete_category_from_recipes(id: string) {
     const recipes = await this.get_recipes({category: id})
 
@@ -141,6 +137,16 @@ class RecipeService {
 
   async delete(id: string) {
     await models.RecipeModel.findByIdAndDelete(id)
+  }
+
+  // DEVELOPMENT
+  
+  async update_all(body: unknown) {
+
+  }
+
+  async delete_all(body: unknown) {
+
   }
 }
 

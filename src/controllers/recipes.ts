@@ -1,5 +1,5 @@
 import express from 'express'
-import { error_handler } from '../middlewares/error.handler.js'
+import { log_error, error_handler } from '../middlewares/error.handler.js'
 import { response } from '../resources/response.js'
 import RecipeManager from '../services/recipes.manager.js'
 import CategoryManager from '../services/categories.manager.js'
@@ -180,21 +180,20 @@ router.delete('/delete/:id', async (req, res) => {
 
 router.put('/updateAll', async (req, res) => {
   try {
-    const recipes = await service.update_all(req.body)
+    const recipes = await recipe_manager.update_all(req.body)
     res.status(201).json(recipes)
   } catch(err) {
-    log_error(err, req, res)
-    error_handler(err, 404, req, res, null)
+    log_error(err)
   }
 })
 
 
 router.delete('/deleteAll', async (req, res) => {
   try {
-    const recipes = await service.delete_all(req.body)
+    const recipes = await recipe_manager.delete_all(req.body)
     res.status(201).json(recipes)
   } catch(err) {
-    error_handler(err, 404, req, res, null)
+    log_error(err)
   }
 })
 
