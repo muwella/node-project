@@ -1,9 +1,9 @@
-# Kittchen
+# Node project
 ### What it is
-Kittchen is a Node & Express REST API.
+This is a Node & Express REST API.
 
 ### What it does
-Kittchen is a personal project intended for solving issues with time management, balancing productivity and wellbeing with an organised diet and a thought out nutrition.
+It is a personal project intended for solving issues with time management, balancing productivity and wellbeing with an organised diet and a thought out nutrition.
 
 It allows the user to keep track of their favorite recipes, their shopping needs, and to plan meals faster and easier.
 
