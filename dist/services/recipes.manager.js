@@ -1,6 +1,5 @@
 import models from '../models/index.js';
 import { faker } from '@faker-js/faker';
-import empty from 'is-empty';
 // recipes management
 class RecipeService {
     constructor() {
@@ -37,9 +36,11 @@ class RecipeService {
         const regex = new RegExp("^[A-Za-z0-9_.,! ]+$");
         return regex.test(name);
     }
+    // WIP missing recipe interfaces
     async create(recipe) {
         return await new models.RecipeModel(recipe).save();
     }
+    // WIP define Query object
     create_filter(query, id) {
         const filter = {
             'creator_id': id
@@ -52,6 +53,7 @@ class RecipeService {
         }
         return filter;
     }
+    // WIP idk what it returns, Promise<Document[] | null>? Promise<Query | null>?
     async get_recipes(filter) {
         return await models.RecipeModel.find(filter);
     }
@@ -65,6 +67,7 @@ class RecipeService {
     async get_recipe_by_name(name) {
         return await models.RecipeModel.findOne({ name: name });
     }
+    // WIP define recipe interfaces, recipes type should be Recipe[] and function return a Recipe
     get_random_recipe(recipes) {
         return recipes[Math.floor(Math.random() * recipes.length)];
     }
@@ -74,11 +77,12 @@ class RecipeService {
         if (recipes.length <= 3) {
             return recipes;
         }
-        else {
+        else if (recipes.length > 3) {
             const min = Math.min(recipes.length, 3);
             for (let i = 0; i < min; i++) {
                 const random_recipe = this.get_random_recipe(recipes);
                 suggestions.push(random_recipe);
+                // WIP idek at this point
                 const index = recipes.indexOf(random_recipe);
                 if (index !== -1) {
                     recipes.splice(index, 1);
@@ -86,10 +90,14 @@ class RecipeService {
             }
             return suggestions;
         }
+        else if (recipes.length == 0) {
+            throw new Error('RECIPES_NOT_FOUND');
+        }
     }
     async get_last_added(id) {
         return models.RecipeModel.find({ creator: id }).sort({ 'creation_date': -1 }).limit(3);
     }
+    // WIP revise change type
     async update(id, change) {
         await models.RecipeModel.findByIdAndUpdate(id, change);
         return await this.get_recipe_by_id(id);
@@ -99,9 +107,9 @@ class RecipeService {
     async delete_category_from_recipes(id) {
         const recipes = await this.get_recipes({ category: id });
         for (const recipe of recipes) {
-            const index = recipe.category.indexOf(id);
-            recipe.category.splice(index, 1);
-            this.update(recipe._id, { category: recipe.category });
+            const index = recipe.categories.indexOf(id);
+            recipe.categories.splice(index, 1);
+            this.update(recipe._id, { categories: recipe.categories });
         }
     }
     async delete(id) {

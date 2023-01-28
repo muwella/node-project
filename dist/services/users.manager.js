@@ -2,7 +2,8 @@ import models from '../models/index.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import isEmpty from 'is-empty';
-const saltRounds = 10;
+import { saltRounds } from '../resources/global.js';
+import { get_private_key } from '../resources/env.js';
 class UserService {
     // PRODUCTION
     async username_taken(username) {
@@ -14,12 +15,7 @@ class UserService {
         return is_taken;
     }
     async check_user_exists(user) {
-        if (user.username) {
-            return await this.username_taken(user.username);
-        }
-        else if (user.email) {
-            return await this.email_taken(user.email);
-        }
+        return await this.username_taken(user.username);
     }
     async user_exists(id) {
         const exists = !isEmpty(await this.get_user_by_id(id));
@@ -29,27 +25,15 @@ class UserService {
         return await bcrypt.compare(plaintextPassword, hash);
     }
     async get_hash_password(user) {
-        if (user.username) {
-            const userDB = await this.get_user_by_username_with_password(user.username);
-            return userDB.password;
-        }
-        else if (user.email) {
-            const userDB = await this.get_user_by_email_with_password(user.email);
-            return userDB.password;
-        }
+        const userDB = await this.get_user_by_username_with_password(user.username);
+        return userDB.password;
     }
     async get_user_for_token(user) {
-        if (user.username) {
-            const userDB = await this.get_user_by_username(user.username);
-            return userDB;
-        }
-        else if (user.email) {
-            return await this.get_user_by_email(user.email);
-        }
+        return await this.get_user_by_username(user.username);
     }
     // LATER have tokens expire and refresh them
     issue_JWT(id) {
-        return jwt.sign({ "user_id": id }, process.env.PRIVATE_KEY);
+        return jwt.sign({ "user_id": id }, get_private_key());
     }
     async get_users() {
         return await models.UserModel.find();
@@ -58,19 +42,43 @@ class UserService {
         return await models.UserModel.findOne({ _id: id });
     }
     async get_user_by_id(id) {
-        return await models.UserModel.findOne({ _id: id });
+        const user = await models.UserModel.findOne({ _id: id });
+        if (!user) {
+            throw new Error('USER_NOT_FOUND');
+        }
+        else {
+            return user;
+        }
     }
     async get_user_by_username(username) {
-        return await models.UserModel.findOne({ username: username }, { password: 0 });
+        const userInDB = await models.UserModel.findOne({ username: username }, { password: 0 });
+        if (!userInDB) {
+            throw new Error('USER_NOT_FOUND');
+        }
+        else {
+            return userInDB;
+        }
     }
     async get_user_by_email(email) {
         return await models.UserModel.findOne({ email: email }, { password: 0 });
     }
     async get_user_by_username_with_password(username) {
-        return await models.UserModel.findOne({ username: username });
+        const user = await models.UserModel.findOne({ username: username });
+        if (!user) {
+            throw new Error('USER_NOT_FOUND');
+        }
+        else {
+            return user;
+        }
     }
     async get_user_by_email_with_password(email) {
-        return await models.UserModel.findOne({ email: email });
+        const user = await models.UserModel.findOne({ email: email });
+        if (!user) {
+            throw new Error('USER_NOT_FOUND');
+        }
+        else {
+            return user;
+        }
     }
     async update(id, change) {
         change = {
@@ -104,13 +112,13 @@ class UserService {
     async update_all(change) {
         for (const key in change) {
             // if type is set, add field
-            if (change[key].type == 'set') {
+            if (change.type == "set") {
                 const users = await models.UserModel.updateMany({}, // all documents
-                { $set: { key: change[key].value } }, { upsert: true });
+                { $set: { key: change.value } }, { upsert: true });
                 console.log(users);
             }
             // if type is unset, remove field
-            if (change[key].type == 'unset') {
+            if (change.type == "unset") {
                 await models.UserModel.updateMany({}, // all documents
                 { $unset: { key } });
             }

@@ -1,60 +1,53 @@
 import models from '../models/index.js';
 import UserService from './users.manager.js';
+import isEmpty from 'is-empty';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import * as regex from '../resources/regex.js';
+import { saltRounds } from '../resources/global.js';
+import { get_private_key } from '../resources/env.js';
 const user_service = new UserService();
 class AccountManager {
+    // WIP i want it to return which credential doesnt exist, if any
     check_credentials_existence(user) {
-        const missing = [];
-        if (!user.username) {
-            missing.push('Username');
+        for (var credential in user) {
+            if (isEmpty(credential))
+                return false;
         }
-        if (!user.password) {
-            missing.push('Password');
-        }
-        return missing;
+        return true;
     }
+    // WIP i want it to return which credential is unavailable, if any
     async check_credentials_availability(user) {
-        const unavailable_credentials = [];
         if (await user_service.username_taken(user.username)) {
-            unavailable_credentials.push('Username');
+            return false;
         }
         if (await user_service.email_taken(user.email)) {
-            unavailable_credentials.push('Email');
+            return false;
         }
-        return unavailable_credentials;
+        return true;
     }
     check_credentials_syntax(user) {
-        const username_regex = /[A-Za-z][A-Za-z0-9_]/;
-        const email_regex = /[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/;
-        const password_regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}/;
         const failed = [];
-        if (!username_regex.test(user.username)) {
+        if (!regex.username_regex.test(user.username)) {
             failed.push('Username');
         }
-        if (!email_regex.test(user.email)) {
+        if (!regex.email_regex.test(user.email)) {
             failed.push('Email');
         }
-        if (!password_regex.test(user.password)) {
+        if (!regex.password_regex.test(user.password)) {
             failed.push('Password');
         }
         return failed;
     }
     async hash_password(password) {
-        const saltRounds = 10;
         return await bcrypt.hash(password, saltRounds);
     }
     async create(user) {
         user.password = await this.hash_password(user.password);
         await new models.UserModel(user).save();
     }
-    // WIP get_private_key function
     login(id) {
-        const private_key = process.env.PRIVATE_KEY;
-        if (!private_key) {
-            throw new Error('PRIVATE_KEY NOT FOUND');
-        }
-        return jwt.sign({ "user_id": id }, private_key);
+        return jwt.sign({ "user_id": id }, get_private_key());
     }
     async confirm(id) {
         await models.UserModel.findByIdAndUpdate(id, { account_confirmed: true });

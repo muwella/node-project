@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
 // WIP changed category to categories
 	// erase everything from the db

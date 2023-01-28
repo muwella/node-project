@@ -1,12 +1,13 @@
-import 'colors';
-const log_error = (err, req, res, next) => {
-    console.error(err.stack.red);
-};
-const error_handler = (err, status, req, res, next) => {
+export const error_handler = (err, status, req, res, next) => {
+    let message = '';
+    if (err instanceof Error)
+        message = err.message;
     return res.status(status).json({
         success: false,
-        message: err.message,
+        message,
         data: err
     });
 };
-export { log_error, error_handler };
+export const log_error = (err) => {
+    console.error(err);
+};

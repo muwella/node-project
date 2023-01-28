@@ -1,6 +1,6 @@
 import express from 'express'
 import { error_handler } from '../middlewares/error.handler.js'
-import response from '../resources/response.js'
+import { response } from '../resources/response.js'
 import RecipeManager from '../services/recipes.manager.js'
 import CategoryManager from '../services/categories.manager.js'
 import isEmpty from 'is-empty'
@@ -46,7 +46,7 @@ router.post('/new', async (req, res) => {
     response(res, 201, 'Recipe created', recipeDB)
 
   } catch(err) {
-    error_handler(err, 400, req, res)
+    error_handler(err, 400, req, res, null)
   }
 })
 
@@ -63,7 +63,7 @@ router.get('/', async (req, res) => {
     response(res, 200, 'Recipes received', recipes)
 
   } catch (err) {
-    error_handler(err, 400, req, res)
+    error_handler(err, 400, req, res, null)
   }
 })
 
@@ -78,7 +78,7 @@ router.get('/suggestions', async (req, res) => {
     response(res, 200, 'Recipe suggestions received', recipes)
     
   } catch (err) {
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
   }
 })
 
@@ -93,7 +93,7 @@ router.get('/lastAdded', async (req, res) => {
     response(res, 200, 'Three last added recipes received', recipes)
 
   } catch (err) {
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
   }
 })
 
@@ -117,7 +117,7 @@ router.get('/:id', async (req, res) => {
     return response(res, 200, 'Recipe received', recipe)
 
   } catch (err) {
-    error_handler(err, 400, req, res)
+    error_handler(err, 400, req, res, null)
   }
 })
 
@@ -145,7 +145,7 @@ router.patch('/update/:id', async (req, res) => {
     response(res, 200, 'Recipe updated', recipe)
 
   } catch (err) {
-    error_handler(err, 400, req, res)
+    error_handler(err, 400, req, res, null)
   }
 })
 
@@ -171,7 +171,7 @@ router.delete('/delete/:id', async (req, res) => {
     return response(res, 200, 'Recipe deleted', recipe)
 
   } catch (err) {
-    error_handler(err, 400, req, res)
+    error_handler(err, 400, req, res, null)
   }
 })
 
@@ -184,7 +184,7 @@ router.put('/updateAll', async (req, res) => {
     res.status(201).json(recipes)
   } catch(err) {
     log_error(err, req, res)
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
   }
 })
 
@@ -194,8 +194,7 @@ router.delete('/deleteAll', async (req, res) => {
     const recipes = await service.delete_all(req.body)
     res.status(201).json(recipes)
   } catch(err) {
-    log_error(err, req, res)
-    error_handler(err, 404, req, res)
+    error_handler(err, 404, req, res, null)
   }
 })
 

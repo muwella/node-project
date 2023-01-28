@@ -17,6 +17,7 @@ class CategoryManager {
         // await meals.save()
         // await dessert.save()
     }
+    // WIP IIRC categories is of type string[]
     async check_categories_existence(user_id, categories) {
         const not_found = [];
         for (const category of categories) {
@@ -25,8 +26,10 @@ class CategoryManager {
                 not_found.push(category);
             }
         }
+        // WIP declaring categories_exist as true but i want it just to be boolean, not have a value
         const obj = {
-            categories_not_found: not_found
+            categories_not_found: not_found,
+            categories_exist: true
         };
         if (isEmpty(not_found)) {
             obj.categories_exist = true;
@@ -61,6 +64,7 @@ class CategoryManager {
     //     const found = user_categories.includes(id)
     //   }
     // }
+    // WIP missing category interfaces
     async create(category) {
         return await new models.CategoryModel(category).save();
     }

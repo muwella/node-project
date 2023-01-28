@@ -1,6 +1,5 @@
 import models from '../models/index.js'
 import { faker } from '@faker-js/faker'
-import empty from 'is-empty'
 
 // recipes management
 class RecipeService {
@@ -30,7 +29,7 @@ class RecipeService {
   }
 
   // returns True if name available
-  async check_name_availability(user_id, name) {
+  async check_name_availability(user_id: string, name: string) {
     const user_recipes = await this.get_recipes({creator_id: user_id})
     return !user_recipes.some(recipe => recipe.name == name)
 
@@ -40,16 +39,18 @@ class RecipeService {
     // })
   }
   
-  async check_name_syntax(name) {
+  async check_name_syntax(name: string) {
     const regex = new RegExp("^[A-Za-z0-9_.,! ]+$")
     return regex.test(name)
   }
   
+  // WIP missing recipe interfaces
   async create(recipe) {
     return await new models.RecipeModel(recipe).save()
   }
 
-  create_filter(query, id) {
+  // WIP define Query object
+  create_filter(query: object, id: string) {
     const filter = {
       'creator_id': id
     }
@@ -65,40 +66,43 @@ class RecipeService {
     return filter
   }
 
-  async get_recipes(filter) {
+  // WIP idk what it returns, Promise<Document[] | null>? Promise<Query | null>?
+  async get_recipes(filter: object) {
     return await models.RecipeModel.find(filter)
   }
 
   // NOTE for user_id + recipe.name case
-  async get_recipe(filter) {
+  async get_recipe(filter: object) {
     return await models.RecipeModel.findOne(filter)
   }
 
-  async get_recipe_by_id(id) {
+  async get_recipe_by_id(id: string) {
     return await models.RecipeModel.findById(id)
   }
 
-  async get_recipe_by_name(name) {
+  async get_recipe_by_name(name: string) {
     return await models.RecipeModel.findOne({name: name})
   }
 
-  get_random_recipe(recipes) {
+  // WIP define recipe interfaces, recipes type should be Recipe[] and function return a Recipe
+  get_random_recipe(recipes: object[]): object {
     return recipes[Math.floor(Math.random()*recipes.length)]
   }
 
-  async get_suggestions(id) {
+  async get_suggestions(id: string) {
     const recipes = await this.get_recipes({'creator': id})
     const suggestions = []
     
     if (recipes.length <= 3) {
       return recipes
-    } else {
+    } else if (recipes.length > 3) {
       const min = Math.min(recipes.length, 3)
 
       for(let i = 0; i < min; i++) {
         const random_recipe = this.get_random_recipe(recipes)
         suggestions.push(random_recipe);
         
+        // WIP idek at this point
         const index = recipes.indexOf(random_recipe)
         if (index !== -1) {
           recipes.splice(index, 1);
@@ -106,14 +110,17 @@ class RecipeService {
       }
 
       return suggestions
+    } else if (recipes.length == 0) {
+      throw new Error('RECIPES_NOT_FOUND')
     }
   }
 
-  async get_last_added(id) {
+  async get_last_added(id: string) {
     return models.RecipeModel.find({creator: id}).sort({'creation_date': -1}).limit(3)
   }
 
-  async update(id, change) {
+  // WIP revise change type
+  async update(id: string, change: object) {
     await models.RecipeModel.findByIdAndUpdate(id, change)
     return await this.get_recipe_by_id(id)
   }
@@ -122,17 +129,17 @@ class RecipeService {
 
   }
 
-  async delete_category_from_recipes(id) {
+  async delete_category_from_recipes(id: string) {
     const recipes = await this.get_recipes({category: id})
 
     for (const recipe of recipes) {
-      const index = recipe.category.indexOf(id)
-      recipe.category.splice(index, 1)
-      this.update(recipe._id, {category: recipe.category})
+      const index = recipe.categories.indexOf(id)
+      recipe.categories.splice(index, 1)
+      this.update(recipe._id, {categories: recipe.categories})
     }
   }
 
-  async delete(id) {
+  async delete(id: string) {
     await models.RecipeModel.findByIdAndDelete(id)
   }
 }

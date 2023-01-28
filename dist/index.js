@@ -1,12 +1,13 @@
-import * as colors from 'colors';
+// WIP when every file is converted to TS
+// npm run dev should "npx tsc && nodemon dist/index.js"
+// so i dont have to manually compile TS to JS before running server
+// IP 192.168.0.76
+import 'colors';
 import * as dotenv from 'dotenv';
 import express from 'express';
 import { verify_token } from './middlewares/token.js';
 import routes from './controllers/index.js';
 import dbConnection from './database.js';
-// LOOKUP joi for schemas
-// IP
-// 192.168.0.76
 dotenv.config();
 const app = express();
 const port = 6006;
@@ -24,5 +25,5 @@ app.use('/', routes);
 dbConnection();
 // start server
 app.listen(port, () => {
-    console.log(colors.cyan(`Server listening on port ${port}`));
+    console.log(`Server listening on port ${port}`.cyan);
 });

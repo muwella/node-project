@@ -6,12 +6,12 @@ import category from './categories.js'
 
 const UserSchema = new Schema(user)
 const RecipeSchema = new Schema(recipe)
-// const IngredientSchema = new Schema(ingredient)
 const CategorySchema = new Schema(category)
+// const IngredientSchema = new Schema(ingredient)
 
 export default {
-	RecipeModel: model('Recipe', RecipeSchema),
 	UserModel: model('User', UserSchema),
-	// IngredientModel: model('Ingredient', IngredientSchema)
+	RecipeModel: model('Recipe', RecipeSchema),
 	CategoryModel: model('Category', CategorySchema)
+	// IngredientModel: model('Ingredient', IngredientSchema)
 }

@@ -1,10 +1,10 @@
 import express from 'express'
 import { error_handler } from '../middlewares/error.handler.js'
 import AccountManager from '../services/account.manager.js'
-import response from '../resources/response.js'
+import { response } from '../resources/response.js'
 import isEmpty from 'is-empty'
 import UserService from '../services/users.manager.js'
-import { UserInCreate } from '../types/user.js'
+import { UserInCreate, UserInLogin } from '../types/user.js'
 
 const router = express.Router()
 const account_manager = new AccountManager()
@@ -15,19 +15,19 @@ router.post('/new', async (req, res) => {
   try {
     const user: UserInCreate = req.body
 
-    const missing_credentials = account_manager.check_credentials_existence(user)
-    if ( !isEmpty(missing_credentials) ) {
-      return response(res, 400, 'Credentials missing', missing_credentials)
+    const credentials_exist = account_manager.check_credentials_existence(user)
+    if (!credentials_exist) {
+      return response(res, 400, 'MISSING_CREDENTIALS', null)
     }
     
-    const unavailable_credentials = await account_manager.check_credentials_availability(user)
-    if ( !isEmpty(unavailable_credentials) ) {
-      return response(res, 400, 'Credentials unavailable', unavailable_credentials)
+    const credentials_available = await account_manager.check_credentials_availability(user)
+    if (!credentials_available) {
+      return response(res, 400, 'UNAVAILABLE_CREDENTIALS', null)
     }
 
     const syntax_error = account_manager.check_credentials_syntax(user)
     if ( !isEmpty(syntax_error) ) {
-      return response(res, 400, 'Invalid credentials syntaxis', syntax_error)
+      return response(res, 400, 'INVALID_CREDENTIALS_SYNTAXIS', syntax_error)
     }
 
     await account_manager.create(user)
@@ -64,9 +64,10 @@ router.patch('/confirmation/:id', async (req, res) => {
 router.patch('/deactivate', async (req, res) => {
   try {
     const token = res.locals.decoded
+    const id = res.locals.user_id
     
-    await account_manager.deactivate(token.user_id)
-    const user = await user_service.get_user_by_id(token.user_id)
+    await account_manager.deactivate(id)
+    const user = await user_service.get_user_by_id(id)
 
     if (!user.active) {
       response(res, 200, 'Account deactivated successfully', null)
@@ -95,7 +96,6 @@ router.patch('/recoverAccount/:id', async (req, res) => {
     }
 
   } catch(err) {
-    log_error(err, req, res)
     error_handler(err, 400, req, res)
   }
 })
@@ -104,7 +104,7 @@ router.patch('/recoverAccount/:id', async (req, res) => {
 // login
 router.post('/login', async (req, res) => {
 	try {
-    const user_login = req.body
+    const user_login: UserInLogin = req.body
 
     console.log(user_login)
     
@@ -118,7 +118,7 @@ router.post('/login', async (req, res) => {
       if (passwords_match) {
         const userDB = await user_service.get_user_for_token(user_login)
         
-        const token = account_manager.login(userDB._id)
+        const token = account_manager.login(userDB.id)
         console.log(token)
         response(res, 200, 'Logged in successfully, received JWT', token)
       } else {

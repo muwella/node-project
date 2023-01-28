@@ -1,10 +1,8 @@
 import express from 'express';
 import { error_handler } from '../middlewares/error.handler.js';
-import response from '../resources/response.js';
+import { response } from '../resources/response.js';
 import RecipeManager from '../services/recipes.manager.js';
 import CategoryManager from '../services/categories.manager.js';
-import isEmpty from 'is-empty';
-import categories from '../models/categories.js';
 const router = express.Router();
 const recipe_manager = new RecipeManager();
 const category_manager = new CategoryManager();
@@ -36,7 +34,7 @@ router.post('/new', async (req, res) => {
         response(res, 201, 'Recipe created', recipeDB);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // get recipes w/query
@@ -48,7 +46,7 @@ router.get('/', async (req, res) => {
         response(res, 200, 'Recipes received', recipes);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // get recipe suggestions
@@ -59,7 +57,7 @@ router.get('/suggestions', async (req, res) => {
         response(res, 200, 'Recipe suggestions received', recipes);
     }
     catch (err) {
-        error_handler(err, 404, req, res);
+        error_handler(err, 404, req, res, null);
     }
 });
 // get 3 last added recipes
@@ -70,7 +68,7 @@ router.get('/lastAdded', async (req, res) => {
         response(res, 200, 'Three last added recipes received', recipes);
     }
     catch (err) {
-        error_handler(err, 404, req, res);
+        error_handler(err, 404, req, res, null);
     }
 });
 // get recipe
@@ -88,7 +86,7 @@ router.get('/:id', async (req, res) => {
         return response(res, 200, 'Recipe received', recipe);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // update recipe
@@ -109,7 +107,7 @@ router.patch('/update/:id', async (req, res) => {
         response(res, 200, 'Recipe updated', recipe);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // delete recipe
@@ -128,7 +126,7 @@ router.delete('/delete/:id', async (req, res) => {
         return response(res, 200, 'Recipe deleted', recipe);
     }
     catch (err) {
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // DEVELOPMENT
@@ -139,7 +137,7 @@ router.put('/updateAll', async (req, res) => {
     }
     catch (err) {
         log_error(err, req, res);
-        error_handler(err, 404, req, res);
+        error_handler(err, 404, req, res, null);
     }
 });
 router.delete('/deleteAll', async (req, res) => {
@@ -148,8 +146,7 @@ router.delete('/deleteAll', async (req, res) => {
         res.status(201).json(recipes);
     }
     catch (err) {
-        log_error(err, req, res);
-        error_handler(err, 404, req, res);
+        error_handler(err, 404, req, res, null);
     }
 });
 export default router;

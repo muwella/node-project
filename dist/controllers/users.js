@@ -1,4 +1,3 @@
-// @ts-check
 import express from 'express';
 import { log_error, error_handler } from '../middlewares/error.handler.js';
 import UserManager from '../services/users.manager.js';
@@ -16,8 +15,7 @@ router.get('/me', async (req, res) => {
         });
     }
     catch (err) {
-        log_error(err, req, res);
-        error_handler(err, 404, req, res);
+        error_handler(err, 404, req, res, null);
     }
 });
 // update self
@@ -32,8 +30,7 @@ router.patch('/me/update', async (req, res) => {
         });
     }
     catch (err) {
-        log_error(err, req, res);
-        error_handler(err, 400, req, res);
+        error_handler(err, 400, req, res, null);
     }
 });
 // DEVELOPMENT
@@ -43,7 +40,7 @@ router.get('/:id', async (req, res) => {
         res.status(200).json(user);
     }
     catch (err) {
-        log_error(err, req, res);
+        log_error(err);
     }
 });
 router.get('/', async (req, res) => {
@@ -52,7 +49,7 @@ router.get('/', async (req, res) => {
         res.status(200).json(users);
     }
     catch (err) {
-        log_error(err, req, res);
+        log_error(err);
     }
 });
 router.put('/updateAll', async (req, res) => {
@@ -61,7 +58,7 @@ router.put('/updateAll', async (req, res) => {
         res.status(200).json(users);
     }
     catch (err) {
-        log_error(err, req, res);
+        log_error(err);
     }
 });
 router.delete('/delete/:id', async (req, res) => {

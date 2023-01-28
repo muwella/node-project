@@ -2,7 +2,7 @@ import express from 'express';
 import { error_handler } from '../middlewares/error.handler.js';
 import CategoryManager from '../services/categories.manager.js';
 import RecipeManager from '../services/recipes.manager.js';
-import response from '../resources/response.js';
+import { response } from '../resources/response.js';
 const router = express.Router();
 const category_manager = new CategoryManager();
 const recipe_manager = new RecipeManager();

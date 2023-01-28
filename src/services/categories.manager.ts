@@ -21,7 +21,8 @@ class CategoryManager {
     // await dessert.save()
   }
 
-  async check_categories_existence(user_id, categories) {
+  // WIP IIRC categories is of type string[]
+  async check_categories_existence(user_id: string, categories: string[]) {
     const not_found = []
     
     for (const category of categories) {
@@ -31,8 +32,10 @@ class CategoryManager {
       }
     }
     
+    // WIP declaring categories_exist as true but i want it just to be boolean, not have a value
     const obj = {
-      categories_not_found: not_found 
+      categories_not_found: not_found,
+      categories_exist: true
     }
     
     if (isEmpty(not_found)) {
@@ -45,7 +48,7 @@ class CategoryManager {
   }
 
   // returns True if name available
-  async check_name_availability(id, name) {
+  async check_name_availability(id: string, name: string) {
     const user_categories = await this.get_categories(id)
     return !user_categories.some(category => category.name == name)
   }
@@ -58,7 +61,7 @@ class CategoryManager {
   //   })
   // }
 
-  check_name_syntax(name) {
+  check_name_syntax(name: string) {
     const regex = new RegExp("^[A-Za-z0-9_.,! ]+$")
     return regex.test(name)
   }
@@ -74,28 +77,29 @@ class CategoryManager {
   //   }
   // }
   
+  // WIP missing category interfaces
   async create(category) {
     return await new models.CategoryModel(category).save()
   }
 
-  async get_categories(user_id) {
+  async get_categories(user_id: string) {
     return await models.CategoryModel.find({creator_id: user_id})
   }
   
-  async get_category_by_id(id) {
+  async get_category_by_id(id: string) {
     return await models.CategoryModel.findById(id)
   }
   
-  async get_category_by_name(name) {
+  async get_category_by_name(name: string) {
     return await models.CategoryModel.findOne({name: name})
   }
 
-  async get_category_by_name_and_user_id(user_id, name) {
+  async get_category_by_name_and_user_id(user_id: string, name: string) {
     return await models.CategoryModel.findOne({name: name, creator_id: user_id})
   }
 
   // NOTE only possible change is name
-  async update(id, change) {
+  async update(id: string, change: object) {
     change = {
       ...change,
       update_date: Date.now()
@@ -104,7 +108,7 @@ class CategoryManager {
     return await models.CategoryModel.findByIdAndUpdate(id, change, { runValidators: true })
   }
 
-  async delete(id) {
+  async delete(id: string) {
     return await models.CategoryModel.findByIdAndDelete(id)
   }
 }
