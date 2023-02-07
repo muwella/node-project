@@ -36,24 +36,21 @@ class RecipeService {
         const regex = new RegExp("^[A-Za-z0-9_.,! ]+$");
         return regex.test(name);
     }
-    // WIP missing recipe interfaces
     async create(recipe) {
         return await new models.RecipeModel(recipe).save();
     }
-    // WIP define Query object
     create_filter(query, id) {
         const filter = {
-            'creator_id': id
+            'creator_id': id,
         };
-        if (query.category) {
-            filter.category = category;
+        if (query.categories) {
+            filter.categories = query.categories;
         }
         if (query.search_text) {
             filter.name = { $regex: query.search_text, $options: 'i' };
         }
         return filter;
     }
-    // WIP idk what it returns, Promise<Document[] | null>? Promise<Query | null>?
     async get_recipes(filter) {
         return await models.RecipeModel.find(filter);
     }
@@ -67,7 +64,6 @@ class RecipeService {
     async get_recipe_by_name(name) {
         return await models.RecipeModel.findOne({ name: name });
     }
-    // WIP define recipe interfaces, recipes type should be Recipe[] and function return a Recipe
     get_random_recipe(recipes) {
         return recipes[Math.floor(Math.random() * recipes.length)];
     }
@@ -82,7 +78,6 @@ class RecipeService {
             for (let i = 0; i < min; i++) {
                 const random_recipe = this.get_random_recipe(recipes);
                 suggestions.push(random_recipe);
-                // WIP idek at this point
                 const index = recipes.indexOf(random_recipe);
                 if (index !== -1) {
                     recipes.splice(index, 1);
@@ -102,12 +97,23 @@ class RecipeService {
         await models.RecipeModel.findByIdAndUpdate(id, change);
         return await this.get_recipe_by_id(id);
     }
-    async delete_category_from_recipes(id) {
-        const recipes = await this.get_recipes({ category: id });
+    // WIP categories are personal?
+    // in that case, delete_category_from_recipes should receive
+    // user_id, get all of their recipes, and then search for the ones that
+    // do have that category and delete it from the recipe
+    async delete_category_from_recipes(user_id, category_id) {
+        const recipes = await this.get_recipes({ _id: user_id });
         for (const recipe of recipes) {
-            const index = recipe.categories.indexOf(id);
-            recipe.categories.splice(index, 1);
-            this.update(recipe._id, { categories: recipe.categories });
+            // if the recipe has any category, search for the one that is being deleted
+            if (recipe.categories) {
+                const index = recipe.categories.indexOf(category_id);
+                if (index == -1)
+                    continue;
+                else {
+                    recipe.categories.splice(index, 1);
+                    this.update(recipe.id, { categories: recipe.categories });
+                }
+            }
         }
     }
     async delete(id) {

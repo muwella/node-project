@@ -5,6 +5,7 @@ import RecipeManager from '../services/recipes.manager.js'
 import CategoryManager from '../services/categories.manager.js'
 import isEmpty from 'is-empty'
 import categories from '../models/categories.js'
+import { Types } from 'mongoose'
 
 const router = express.Router()
 const recipe_manager = new RecipeManager()
@@ -55,7 +56,9 @@ router.post('/new', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const token = res.locals.decoded
-    
+
+    // FIXME req.query
+    // https://stackoverflow.com/questions/63579867/what-does-this-error-say-type-parsedqs-is-not-assignable-to-type-string
     const filter = recipe_manager.create_filter(req.query, token.user_id)
 
     const recipes = await recipe_manager.get_recipes(filter)
@@ -101,7 +104,7 @@ router.get('/lastAdded', async (req, res) => {
 // get recipe
 router.get('/:id', async (req, res) => {
   try {
-    const id = req.params.id
+    const id: Types.ObjectId = res.locals.decoded.user_id
     const token = res.locals.decoded
 
     const recipe = await recipe_manager.get_recipe_by_id(id)
@@ -126,7 +129,7 @@ router.get('/:id', async (req, res) => {
 router.patch('/update/:id', async (req, res) => {
   try {
     const token = res.locals.decoded
-    const id = req.params.id
+    const id: Types.ObjectId = res.locals.decoded.user_id
     const change = req.body
 
     let recipe = await recipe_manager.get_recipe_by_id(id)
@@ -154,7 +157,7 @@ router.patch('/update/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
   try {
     const token = res.locals.decoded
-    const id = req.params.id
+    const id: Types.ObjectId = res.locals.decoded.user_id
 
     const recipe = await recipe_manager.get_recipe_by_id(id)
 

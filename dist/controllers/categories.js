@@ -3,6 +3,7 @@ import { error_handler } from '../middlewares/error.handler.js';
 import CategoryManager from '../services/categories.manager.js';
 import RecipeManager from '../services/recipes.manager.js';
 import { response } from '../resources/response.js';
+import { Types } from 'mongoose';
 const router = express.Router();
 const category_manager = new CategoryManager();
 const recipe_manager = new RecipeManager();
@@ -47,7 +48,7 @@ router.get('/', async (req, res) => {
 router.patch('/update/:id', async (req, res) => {
     try {
         const token = res.locals.decoded;
-        const id = req.params.id;
+        const id = new Types.ObjectId(req.params.id);
         const change = req.body;
         let category = await category_manager.get_category_by_id(id);
         if (!category) {
@@ -69,20 +70,20 @@ router.patch('/update/:id', async (req, res) => {
     }
 });
 // delete category
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:category_id', async (req, res) => {
     try {
-        const token = res.locals.decoded;
-        const id = req.params.id;
-        const category = await category_manager.get_category_by_id(id);
+        const user_id = res.locals.decoded.user_id;
+        const category_id = new Types.ObjectId(req.params.category_id);
+        const category = await category_manager.get_category_by_id(category_id);
         console.log(category);
         if (!category) {
             return response(res, 404, 'Category not found', null);
         }
-        if (category.creator_id != token.user_id) {
+        if (category.creator_id != user_id) {
             return response(res, 403, 'PERMISSION_DENIED', 'You don\'t have permission to access this resource');
         }
-        await recipe_manager.delete_category_from_recipes(id);
-        await category_manager.delete(id);
+        await recipe_manager.delete_category_from_recipes(user_id, category_id);
+        await category_manager.delete(category_id);
         return response(res, 200, 'Category deleted', category);
     }
     catch (err) {

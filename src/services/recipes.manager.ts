@@ -86,7 +86,7 @@ class RecipeService {
     return await models.RecipeModel.findOne(filter)
   }
 
-  async get_recipe_by_id(id: string) {
+  async get_recipe_by_id(id: Types.ObjectId) {
     return await models.RecipeModel.findById(id)
   }
 
@@ -128,7 +128,7 @@ class RecipeService {
   }
 
   // WIP revise change type
-  async update(id: string, change: object) {
+  async update(id: Types.ObjectId, change: object) {
     await models.RecipeModel.findByIdAndUpdate(id, change)
     return await this.get_recipe_by_id(id)
   }
@@ -137,19 +137,25 @@ class RecipeService {
     // in that case, delete_category_from_recipes should receive
     // user_id, get all of their recipes, and then search for the ones that
     // do have that category and delete it from the recipe
-  async delete_category_from_recipes(id: Types.ObjectId) {
-    // get recipes from db that have 
-    const recipes = await this.get_recipes({categories: id})
+  async delete_category_from_recipes(user_id: Types.ObjectId, category_id: Types.ObjectId) {
+    const recipes = await this.get_recipes({ _id: user_id })
 
     for (const recipe of recipes) {
-        const index = recipe.categories.indexOf(id)
+      // if the recipe has any category, search for the one that is being deleted
+      if (recipe.categories) {
+        const index = recipe.categories.indexOf(category_id)
+
+        if (index == -1) continue
+        else {
+          recipe.categories.splice(index, 1)
+          this.update(recipe.id, {categories: recipe.categories})
+        }
+      }
   
-        recipe.categories.splice(index, 1)
-        this.update(recipe.id, {categories: recipe.categories})
     }
   }
 
-  async delete(id: string) {
+  async delete(id: Types.ObjectId) {
     await models.RecipeModel.findByIdAndDelete(id)
   }
 

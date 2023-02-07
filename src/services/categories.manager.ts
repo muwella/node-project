@@ -1,5 +1,7 @@
 import isEmpty from 'is-empty'
 import models from '../models/index.js'
+import { Types } from 'mongoose'
+import { CategoryInCreate } from '../types/category.js'
 
 // categories management
 class CategoryManager {
@@ -22,7 +24,7 @@ class CategoryManager {
   }
 
   // WIP IIRC categories is of type string[]
-  async check_categories_existence(user_id: string, categories: string[]) {
+  async check_categories_existence(user_id: Types.ObjectId, categories: Types.ObjectId[]) {
     const not_found = []
     
     for (const category of categories) {
@@ -78,7 +80,7 @@ class CategoryManager {
   // }
   
   // WIP missing category interfaces
-  async create(category) {
+  async create(category: CategoryInCreate) {
     return await new models.CategoryModel(category).save()
   }
 
@@ -86,7 +88,7 @@ class CategoryManager {
     return await models.CategoryModel.find({creator_id: user_id})
   }
   
-  async get_category_by_id(id: string) {
+  async get_category_by_id(id: Types.ObjectId) {
     return await models.CategoryModel.findById(id)
   }
   
@@ -99,7 +101,7 @@ class CategoryManager {
   }
 
   // NOTE only possible change is name
-  async update(id: string, change: object) {
+  async update(id: Types.ObjectId, change: object) {
     change = {
       ...change,
       update_date: Date.now()
@@ -108,7 +110,7 @@ class CategoryManager {
     return await models.CategoryModel.findByIdAndUpdate(id, change, { runValidators: true })
   }
 
-  async delete(id: string) {
+  async delete(id: Types.ObjectId) {
     return await models.CategoryModel.findByIdAndDelete(id)
   }
 }

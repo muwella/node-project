@@ -4,6 +4,7 @@ import recipe from './recipes.js';
 // import ingredient from './ingredients.js'
 import category from './categories.js';
 // FIXME ts(2345)
+// idek at this point
 const UserSchema = new Schema(user);
 const RecipeSchema = new Schema(recipe);
 const CategorySchema = new Schema(category);

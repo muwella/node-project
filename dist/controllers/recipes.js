@@ -41,6 +41,8 @@ router.post('/new', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const token = res.locals.decoded;
+        // FIXME req.query
+        // https://stackoverflow.com/questions/63579867/what-does-this-error-say-type-parsedqs-is-not-assignable-to-type-string
         const filter = recipe_manager.create_filter(req.query, token.user_id);
         const recipes = await recipe_manager.get_recipes(filter);
         response(res, 200, 'Recipes received', recipes);
@@ -74,7 +76,7 @@ router.get('/lastAdded', async (req, res) => {
 // get recipe
 router.get('/:id', async (req, res) => {
     try {
-        const id = req.params.id;
+        const id = res.locals.decoded.user_id;
         const token = res.locals.decoded;
         const recipe = await recipe_manager.get_recipe_by_id(id);
         if (!recipe) {
@@ -93,7 +95,7 @@ router.get('/:id', async (req, res) => {
 router.patch('/update/:id', async (req, res) => {
     try {
         const token = res.locals.decoded;
-        const id = req.params.id;
+        const id = res.locals.decoded.user_id;
         const change = req.body;
         let recipe = await recipe_manager.get_recipe_by_id(id);
         if (!recipe) {
@@ -114,7 +116,7 @@ router.patch('/update/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
     try {
         const token = res.locals.decoded;
-        const id = req.params.id;
+        const id = res.locals.decoded.user_id;
         const recipe = await recipe_manager.get_recipe_by_id(id);
         if (!recipe) {
             return response(res, 404, 'Recipe not found', null);
