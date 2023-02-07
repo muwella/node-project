@@ -1,5 +1,5 @@
-import { Types } from "mongoose"
 import { BaseModel } from "./base.d.ts"
+import { Types } from "mongoose"
 
 interface UserBase {
     username: string,
