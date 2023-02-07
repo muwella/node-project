@@ -1,5 +1,18 @@
 import models from '../models/index.js'
 import { faker } from '@faker-js/faker'
+import { RecipeInCreate, RecipeInDB, RecipeInUpdate } from '../types/recipe.js'
+import { Types } from 'mongoose'
+
+interface RecipeQuery {
+  categories: Types.ObjectId[] | null,
+  search_text: string
+}
+
+interface RecipeFilter {
+  creator_id: Types.ObjectId,
+  categories?: Types.ObjectId[] | null,
+  name?: object
+}
 
 // recipes management
 class RecipeService {
@@ -29,7 +42,7 @@ class RecipeService {
   }
 
   // returns True if name available
-  async check_name_availability(user_id: string, name: string) {
+  async check_name_availability(user_id: string, name: string): Promise<Boolean> {
     const user_recipes = await this.get_recipes({creator_id: user_id})
     return !user_recipes.some(recipe => recipe.name == name)
 
@@ -44,19 +57,17 @@ class RecipeService {
     return regex.test(name)
   }
   
-  // WIP missing recipe interfaces
-  async create(recipe) {
+  async create(recipe: RecipeInCreate) {
     return await new models.RecipeModel(recipe).save()
   }
 
-  // WIP define Query object
-  create_filter(query: object, id: string) {
-    const filter = {
-      'creator_id': id
+  create_filter(query: RecipeQuery, id: Types.ObjectId) {
+    const filter: RecipeFilter = {
+      'creator_id': id,
     }
-
-    if (query.category){
-      filter.category = category
+    
+    if (query.categories){
+      filter.categories = query.categories
     }
     
     if (query.search_text){
@@ -66,8 +77,7 @@ class RecipeService {
     return filter
   }
 
-  // WIP idk what it returns, Promise<Document[] | null>? Promise<Query | null>?
-  async get_recipes(filter: object) {
+  async get_recipes(filter: object): Promise<RecipeInDB[]> {
     return await models.RecipeModel.find(filter)
   }
 
@@ -84,14 +94,13 @@ class RecipeService {
     return await models.RecipeModel.findOne({name: name})
   }
 
-  // WIP define recipe interfaces, recipes type should be Recipe[] and function return a Recipe
-  get_random_recipe(recipes: object[]): object {
+  get_random_recipe(recipes: RecipeInDB[]): RecipeInDB {
     return recipes[Math.floor(Math.random()*recipes.length)]
   }
 
   async get_suggestions(id: string) {
     const recipes = await this.get_recipes({'creator': id})
-    const suggestions = []
+    const suggestions: RecipeInDB[] = []
     
     if (recipes.length <= 3) {
       return recipes
@@ -102,7 +111,6 @@ class RecipeService {
         const random_recipe = this.get_random_recipe(recipes)
         suggestions.push(random_recipe);
         
-        // WIP idek at this point
         const index = recipes.indexOf(random_recipe)
         if (index !== -1) {
           recipes.splice(index, 1);
@@ -125,13 +133,19 @@ class RecipeService {
     return await this.get_recipe_by_id(id)
   }
 
-  async delete_category_from_recipes(id: string) {
-    const recipes = await this.get_recipes({category: id})
+  // WIP categories are personal?
+    // in that case, delete_category_from_recipes should receive
+    // user_id, get all of their recipes, and then search for the ones that
+    // do have that category and delete it from the recipe
+  async delete_category_from_recipes(id: Types.ObjectId) {
+    // get recipes from db that have 
+    const recipes = await this.get_recipes({categories: id})
 
     for (const recipe of recipes) {
-      const index = recipe.categories.indexOf(id)
-      recipe.categories.splice(index, 1)
-      this.update(recipe._id, {categories: recipe.categories})
+        const index = recipe.categories.indexOf(id)
+  
+        recipe.categories.splice(index, 1)
+        this.update(recipe.id, {categories: recipe.categories})
     }
   }
 
