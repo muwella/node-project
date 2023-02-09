@@ -1,17 +1,17 @@
 export default {
 	username: {
     type: String,
-    required: [true, 'Username required'],
+    required: true,
     unique: true
   },
   email: {
     type: String,
-    required: [true, 'Email required'],
+    required: true,
     unique: true
   },
   password: {
     type: String,
-    required: [true, 'Password required']
+    required: true
   },
 	name: {
     type: String,
