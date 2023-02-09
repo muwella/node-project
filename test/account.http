@@ -39,7 +39,6 @@ content-type: application/json
 
 ###
 
-
 # HTTP CONFIRM ACCOUNT
 // LATER user cannot create recipes until account is confirmed
 PATCH http://localhost:3001/api/v1/account/confirmation/638ffd43a76fd0d67b9fd89d
@@ -56,71 +55,3 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjM4ZmZkNDNh
 // HTTP RECOVER ACCOUNT (ACTIVATE)
 // LATER user should get this link on mail
 PATCH http://localhost:3001/api/v1/account/recoverAccount/638ffd43a76fd0d67b9fd89d
-
-###
-
-// LOGIN MANAGEMENT
-
-// HTTP LOGIN | Username OK | Password OK
-POST http://localhost:6006/api/v1/account/login
-content-type: application/json
-
-{
-	"username": "muwella",
-	"password": "3A84%pMHoygK"
-}
-
-###
-
-// HTTP LOGIN | Email OK | Password OK
-POST http://localhost:6006/api/v1/account/login
-content-type: application/json
-
-{
-	"email": "test@mail.com",
-	"password": "testPassword"
-}
-
-###
-
-// HTTP LOGIN | Username OK | Wrong Password
-POST http://localhost:6006/api/v1/account/login
-content-type: application/json
-
-{
-	"username": "test",
-	"password": "wrongPassword"
-}
-
-###
-
-// HTTP LOGIN | Email OK | Wrong Password
-POST http://localhost:3001/api/v1/account/login
-content-type: application/json
-
-{
-	"email": "test@mail.com",
-	"password": "wrongPassword"
-}
-
-###
-
-// HTTP LOGIN | Wrong Username
-POST http://localhost:6006/api/v1/account/login
-content-type: application/json
-
-{
-	"username": "wrongUsername",
-	"password": "testPassword"
-}
-
-###
-
-// HTTP LOGIN | Wrong Email
-POST http://localhost:3001/api/v1/account/login
-content-type: application/json
-
-{
-	"email": "wrong@email.com",
-	"password": "testPassword"
-}

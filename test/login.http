@@ -1,0 +1,63 @@
+// HTTP LOGIN | Username OK | Password OK
+POST http://localhost:6006/api/v1/account/login
+content-type: application/json
+
+{
+	"username": "muwella",
+	"password": "3A84%pMHoygK"
+}
+
+###
+
+// HTTP LOGIN | Email OK | Password OK
+POST http://localhost:6006/api/v1/account/login
+content-type: application/json
+
+{
+	"email": "test@mail.com",
+	"password": "testPassword"
+}
+
+###
+
+// HTTP LOGIN | Username OK | Wrong Password
+POST http://localhost:6006/api/v1/account/login
+content-type: application/json
+
+{
+	"username": "test",
+	"password": "wrongPassword"
+}
+
+###
+
+// HTTP LOGIN | Email OK | Wrong Password
+POST http://localhost:3001/api/v1/account/login
+content-type: application/json
+
+{
+	"email": "test@mail.com",
+	"password": "wrongPassword"
+}
+
+###
+
+// HTTP LOGIN | Wrong Username
+POST http://localhost:6006/api/v1/account/login
+content-type: application/json
+
+{
+	"username": "wrongUsername",
+	"password": "testPassword"
+}
+
+###
+
+// HTTP LOGIN | Wrong Email
+POST http://localhost:3001/api/v1/account/login
+content-type: application/json
+
+{
+	"email": "wrong@email.com",
+	"password": "testPassword"
+}
