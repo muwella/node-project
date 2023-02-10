@@ -57,11 +57,11 @@ class RecipeService {
     return regex.test(name)
   }
   
-  async create(recipe: RecipeInCreate) {
+  async create(recipe: RecipeInCreate, user_id: Types.ObjectId) {
     return await new models.RecipeModel(recipe).save()
   }
 
-  create_filter(query: RecipeQuery, id: Types.ObjectId) {
+  create_filter(query: , id: Types.ObjectId) {
     const filter: RecipeFilter = {
       'creator_id': id,
     }

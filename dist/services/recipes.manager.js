@@ -36,7 +36,7 @@ class RecipeService {
         const regex = new RegExp("^[A-Za-z0-9_.,! ]+$");
         return regex.test(name);
     }
-    async create(recipe) {
+    async create(recipe, user_id) {
         return await new models.RecipeModel(recipe).save();
     }
     create_filter(query, id) {

@@ -4,7 +4,6 @@ import CategoryManager from '../services/categories.manager.js'
 import RecipeManager from '../services/recipes.manager.js'
 import { response } from '../resources/response.js'
 import { Types } from 'mongoose'
-import stringToObjectId from 'string-to-objectid'
 
 const router = express.Router()
 const category_manager = new CategoryManager()

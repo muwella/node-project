@@ -12,7 +12,6 @@ router.post('/new', async (req, res) => {
     try {
         const user_id = res.locals.user_id;
         const recipe = req.body;
-        recipe.creator_id = user_id;
         // check name existence
         if (!recipe.name) {
             return response(res, 400, 'MISSING_VALUE_NAME', null);
@@ -25,11 +24,15 @@ router.post('/new', async (req, res) => {
         if (!syntax_success) {
             return response(res, 400, 'INVALID_SYNTAX', recipe.name);
         }
-        const check_categories = await category_manager.check_categories_existence(user_id, recipe.category);
-        if (!check_categories.categories_exist) {
-            return response(res, 404, 'CATEGORY_DOES_NOT_EXIST', check_categories.categories_not_found);
+        // if recipe has at least one category
+        if (recipe.categories) {
+            const check_categories = await category_manager.check_categories_existence(user_id, recipe.categories);
+            // if any category ID does not match with user categories
+            if (!check_categories.categories_exist) {
+                return response(res, 404, 'CATEGORY_DOES_NOT_EXIST', check_categories.categories_not_found);
+            }
         }
-        await recipe_manager.create(recipe);
+        await recipe_manager.create(recipe, user_id);
         const recipeDB = await recipe_manager.get_recipe_by_name(recipe.name);
         response(res, 201, 'Recipe created', recipeDB);
     }

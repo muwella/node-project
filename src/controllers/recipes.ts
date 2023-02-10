@@ -6,6 +6,7 @@ import CategoryManager from '../services/categories.manager.js'
 import isEmpty from 'is-empty'
 import categories from '../models/categories.js'
 import { Types } from 'mongoose'
+import { RecipeInCreate, RecipeInDB } from '../types/recipe.js'
 
 const router = express.Router()
 const recipe_manager = new RecipeManager()
@@ -17,8 +18,7 @@ const category_manager = new CategoryManager()
 router.post('/new', async (req, res) => {
   try {
     const user_id = res.locals.user_id
-    const recipe = req.body
-    recipe.creator_id = user_id
+    const recipe: RecipeInCreate = req.body
 
     // check name existence
     if (!recipe.name) {
@@ -35,13 +35,17 @@ router.post('/new', async (req, res) => {
       return response(res, 400, 'INVALID_SYNTAX', recipe.name)
     }
     
-    const check_categories = await category_manager.check_categories_existence(user_id, recipe.category)
-    
-    if (!check_categories.categories_exist) {
-      return response(res, 404, 'CATEGORY_DOES_NOT_EXIST', check_categories.categories_not_found)
+    // if recipe has at least one category
+    if (recipe.categories) {
+      const check_categories = await category_manager.check_categories_existence(user_id, recipe.categories)
+      
+      // if any category ID does not match with user categories
+      if (!check_categories.categories_exist) {
+        return response(res, 404, 'CATEGORY_DOES_NOT_EXIST', check_categories.categories_not_found)
+      }
     }
 
-    await recipe_manager.create(recipe)
+    await recipe_manager.create(recipe, user_id)
 
     const recipeDB = await recipe_manager.get_recipe_by_name(recipe.name)
     response(res, 201, 'Recipe created', recipeDB)
