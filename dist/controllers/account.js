@@ -1,9 +1,10 @@
 import express from 'express';
 import { error_handler } from '../middlewares/error.handler.js';
 import AccountManager from '../services/account.manager.js';
-import { response } from '../resources/response.js';
+import { response, message } from '../resources/response.js';
 import isEmpty from 'is-empty';
 import UserService from '../services/users.manager.js';
+import { Types } from 'mongoose';
 const router = express.Router();
 const account_manager = new AccountManager();
 const user_service = new UserService();
@@ -11,17 +12,17 @@ const user_service = new UserService();
 router.post('/new', async (req, res) => {
     try {
         const user = req.body;
-        const credentials_exist = account_manager.check_credentials_existence(user);
-        if (!credentials_exist) {
-            return response(res, 400, 'MISSING_CREDENTIALS', null);
+        const missing_credentials = account_manager.check_credentials_existence(user);
+        if (!isEmpty(missing_credentials)) {
+            return response(res, 400, message.MISSING_CREDENTIALS, missing_credentials);
         }
-        const credentials_available = await account_manager.check_credentials_availability(user);
-        if (!credentials_available) {
-            return response(res, 400, 'UNAVAILABLE_CREDENTIALS', null);
+        const unavailable_credentials = await account_manager.check_credentials_availability(user);
+        if (!isEmpty(unavailable_credentials)) {
+            return response(res, 400, message.UNAVAILABLE_CREDENTIALS, unavailable_credentials);
         }
-        const syntax_error = account_manager.check_credentials_syntax(user);
-        if (!isEmpty(syntax_error)) {
-            return response(res, 400, 'INVALID_CREDENTIALS_SYNTAXIS', syntax_error);
+        const invalid_credentials = account_manager.check_credentials_syntax(user);
+        if (!isEmpty(invalid_credentials)) {
+            return response(res, 400, message.INVALID_CREDENTIALS, invalid_credentials);
         }
         await account_manager.create(user);
         response(res, 201, 'Account created', null);
@@ -33,14 +34,22 @@ router.post('/new', async (req, res) => {
 // confirm account
 router.patch('/confirmation/:id', async (req, res) => {
     try {
-        const id = req.params.id;
-        await account_manager.confirm(id);
-        const user = await user_service.get_user_by_id(id);
-        if (user.account_confirmed) {
-            response(res, 200, 'Account confirmed successfully', user);
+        const id = new Types.ObjectId(req.params.id);
+        // check if ID matches existing user
+        const user_exists = await account_manager.check_user_exists(id);
+        if (user_exists) {
+            // check if it's already confirmed
+            const account_confirmed = await account_manager.check_account_confirmed(id);
+            if (account_confirmed) {
+                response(res, 100, message.USER_ALREADY_CONFIRMED, null);
+            }
+            else {
+                await account_manager.confirm(id);
+                response(res, 200, message.USER_CONFIRMED_OK, null);
+            }
         }
         else {
-            response(res, 400, 'Error confirming account', user);
+            response(res, 404, message.USER_NOT_FOUND, null);
         }
     }
     catch (err) {
@@ -51,15 +60,16 @@ router.patch('/confirmation/:id', async (req, res) => {
 router.patch('/deactivate', async (req, res) => {
     try {
         const token = res.locals.decoded;
-        const id = res.locals.user_id;
+        const id = new Types.ObjectId(res.locals.user_id);
         await account_manager.deactivate(id);
-        const user = await user_service.get_user_by_id(id);
-        if (!user.active) {
-            response(res, 200, 'Account deactivated successfully', null);
-        }
-        else {
-            response(res, 400, 'Error deactivating account', null);
-        }
+        response(res, 200, message.USER_INACTIVE_OK, null);
+        // DOUBT should i check to be sure that user has been deactivated? Or just trust that it was
+        // const user = await user_service.get_user_by_id(id)
+        // if (!user.active) {
+        //   response(res, 200, message.USER_INACTIVE_OK, null)
+        // } else {
+        //   response(res, 400, 'Error deactivating account', null)
+        // }
     }
     catch (err) {
         error_handler(err, 400, req, res, null);

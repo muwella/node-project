@@ -46,8 +46,8 @@ class RecipeService {
         if (query.categories) {
             filter.categories = query.categories;
         }
-        if (query.search_text) {
-            filter.name = { $regex: query.search_text, $options: 'i' };
+        if (query.name) {
+            filter.name = { $regex: query.name, $options: 'i' };
         }
         return filter;
     }

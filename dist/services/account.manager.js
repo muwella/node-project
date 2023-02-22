@@ -8,43 +8,106 @@ import { saltRounds } from '../resources/global.js';
 import { get_private_key } from '../resources/env.js';
 const user_service = new UserService();
 class AccountManager {
-    // WIP i want it to return which credential doesnt exist, if any
+    /**
+     * Receives user creation form and checks that it has every mandatory UserInCreate property.
+     * @param {UserInCreate} user
+     * @returns {string[] | []} Missing properties, if any.
+     */
     check_credentials_existence(user) {
-        for (var credential in user) {
-            if (isEmpty(credential))
-                return false;
+        const missing_credentials = [];
+        if (!user.username) {
+            missing_credentials.push('username');
         }
-        return true;
+        if (!user.email) {
+            missing_credentials.push('email');
+        }
+        if (!user.password) {
+            missing_credentials.push('password');
+        }
+        if (!user.name) {
+            missing_credentials.push('name');
+        }
+        return missing_credentials;
     }
-    // WIP i want it to return which credential is unavailable, if any
+    /**
+     * Receives user creation form and checks that every unique property (username, email) is available.
+     * @param user
+     * @returns {string[] | []} Unavailable properties, if any.
+     */
     async check_credentials_availability(user) {
-        if (await user_service.username_taken(user.username)) {
-            return false;
+        const unavailable_credentials = [];
+        if (await user_service.username_is_taken(user.username)) {
+            unavailable_credentials.push('username');
         }
-        if (await user_service.email_taken(user.email)) {
-            return false;
+        if (await user_service.email_is_taken(user.email)) {
+            unavailable_credentials.push('email');
         }
-        return true;
+        return unavailable_credentials;
     }
+    /**
+     * Receives user creation form and checks for proper syntax.
+     * @param user
+     * @returns {string[] | []} Invalid properties, if any.
+     */
     check_credentials_syntax(user) {
-        const failed = [];
+        const invalid_credentials = [];
         if (!regex.username_regex.test(user.username)) {
-            failed.push('Username');
+            invalid_credentials.push('username');
         }
         if (!regex.email_regex.test(user.email)) {
-            failed.push('Email');
+            invalid_credentials.push('email');
         }
         if (!regex.password_regex.test(user.password)) {
-            failed.push('Password');
+            invalid_credentials.push('password');
         }
-        return failed;
+        return invalid_credentials;
     }
+    /**
+     * Checks in database if user exists by id.
+     * @param {Types.ObjectId} id
+     * @returns {boolean} True if id is used. False is no user is found.
+     */
+    async check_user_exists(id) {
+        const user = await this.get_user_by_id(id);
+        return !isEmpty(user);
+    }
+    /**
+     * Get user in database by id.
+     * @param id
+     * @returns {UserInDB | null} User instance or null.
+     */
+    async get_user_by_id(id) {
+        return await models.UserModel.findById(id);
+    }
+    /**
+     * Encrypts a plain text password.
+     * @param {string} password
+     * @returns {string} Hashed password.
+     */
     async hash_password(password) {
         return await bcrypt.hash(password, saltRounds);
     }
+    /**
+     * Receives user creation form and creates user instance in database.
+     * @param user
+     */
     async create(user) {
         user.password = await this.hash_password(user.password);
         await new models.UserModel(user).save();
+    }
+    /**
+     * Searches for user in database and returns 'account_confirmed' property state.
+     * @param {Types.ObjectId} id
+     * @returns {boolean} True if 'account_confirmed' is true. False if 'account_confirmed' is false.
+     */
+    async check_account_confirmed(id) {
+        const user = await this.get_user_by_id(id);
+        if (user) {
+            return user.account_confirmed;
+        }
+        else {
+            throw new Error('USER_NOT_FOUND');
+        }
     }
     login(id) {
         return jwt.sign({ "user_id": id }, get_private_key());
@@ -52,6 +115,10 @@ class AccountManager {
     async confirm(id) {
         await models.UserModel.findByIdAndUpdate(id, { account_confirmed: true });
     }
+    /**
+     * Receives user id and deactivates their account.
+     * @param {Types.ObjectId} id
+     */
     async deactivate(id) {
         await models.UserModel.findByIdAndUpdate(id, { active: false });
     }

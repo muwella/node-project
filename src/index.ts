@@ -16,6 +16,7 @@ const app = express()
 const port = 6006
 
 app.use(express.json())
+app.use('/', routes)
 
 // middlewares
 app.use(verify_token)
@@ -33,13 +34,9 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/', routes)
-
 dbConnection()
 
 // start server
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`.cyan)
 })
-
-console.log('solucioneishon problemeishon'.bold)

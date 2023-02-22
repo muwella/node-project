@@ -1,3 +1,90 @@
+// WIP old account
+
+// HTTP CREATE USER
+// LATER after creation user gets a confirmation mail
+POST http://localhost:6006/api/v1/users/new
+content-type: application/json
+
+{
+	"username": "anotherNonTakenUsername",
+	"name": "Maru",
+	"email": "marielabrascon@gmail.com",
+	"password": "3A84%pMHoygK"
+}
+
+###
+
+// HTTP CREATE USER | Missing credentials
+POST http://localhost:6006/api/v1/users/new
+content-type: application/json
+
+{
+}
+
+###
+
+// HTTP CREATE USER | Unavailable credentials (Username)
+POST http://localhost:6006/api/v1/users/new
+content-type: application/json
+
+{
+	"username": "muwella",
+	"name": "Maru",
+	"email": "availableEmail@mail.com",
+	"password": "somethinG123"
+}
+
+###
+
+// HTTP CREATE USER | Unavailable credentials (Email)
+POST http://localhost:6006/api/v1/users/new
+content-type: application/json
+
+{
+	"username": "availableUsername",
+	"name": "Maru",
+	"email": "marielabrascon@mail.com",
+	"password": "somethinG123"
+}
+
+###
+
+// HTTP CREATE USER | Invalid credentials
+POST http://localhost:6006/api/v1/users/new
+content-type: application/json
+
+{
+	"username": "_",
+	"name": "Maru",
+	"email": "%invalid mail%@mail.com",
+	"password": "$"
+}
+
+###
+
+# HTTP CONFIRM ACCOUNT
+// LATER user cannot create recipes until account is confirmed
+PATCH http://localhost:6006/api/v1/users/confirmation/63c6ec751fa701f4242c035e
+
+###
+
+// HTTP DEACTIVATE ACCOUNT
+// LATER after deactivation user gets an email with recover account link
+PATCH http://localhost:6006/api/v1/users/deactivate
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjNjNmVjNzUxZmE3MDFmNDI0MmMwMzVlIiwiaWF0IjoxNjc2NDg0ODI3fQ.Cgw-bmbt50GoMYNfXQauvGAKMBcFGCB7C5lGg41onMc
+
+###
+
+// HTTP RECOVER ACCOUNT (ACTIVATE)
+// LATER user should get this link on mail
+PATCH http://localhost:3001/api/v1/users/recoverAccount/638ffd43a76fd0d67b9fd89d
+
+
+
+
+
+// WIP old user
+
 // PRODUCTION
 
 // HTTP GET USER (SELF)

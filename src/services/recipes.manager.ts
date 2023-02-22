@@ -3,11 +3,15 @@ import { faker } from '@faker-js/faker'
 import { RecipeInCreate, RecipeInDB, RecipeInUpdate } from '../types/recipe.js'
 import { Types } from 'mongoose'
 
+// WIP RecipeQuery, parametros opcionales para busqueda de recetas
 interface RecipeQuery {
-  categories: Types.ObjectId[] | null,
-  search_text: string
+  name?: string
+  ingredientes?: string[]
+  categories?: Types.ObjectId[]
 }
 
+// WIP RecipeFilter, objeto para filtrar recetas en base de datos
+// Es distinto a RecipeQuery porque puede llevar una RegEx
 interface RecipeFilter {
   creator_id: Types.ObjectId,
   categories?: Types.ObjectId[] | null,
@@ -61,7 +65,7 @@ class RecipeService {
     return await new models.RecipeModel(recipe).save()
   }
 
-  create_filter(query: , id: Types.ObjectId) {
+  create_filter(query: RecipeQuery, id: Types.ObjectId) {
     const filter: RecipeFilter = {
       'creator_id': id,
     }
@@ -70,8 +74,8 @@ class RecipeService {
       filter.categories = query.categories
     }
     
-    if (query.search_text){
-      filter.name = { $regex: query.search_text, $options: 'i' }
+    if (query.name){
+      filter.name = { $regex: query.name, $options: 'i' }
     }
   
     return filter
